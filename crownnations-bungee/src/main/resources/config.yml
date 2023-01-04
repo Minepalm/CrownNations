@@ -1,0 +1,39 @@
+dataSource:
+  nation: 'default'
+  member: 'default'
+  addon: 'default'
+  misc: 'default'
+  territory: 'default'
+  schematic: 'default'
+  grade: 'default'
+  bank: 'default'
+member:
+  regexFilter: '^[a-zA-Z0-9가-힣]*.'
+  displayMaxLength: 16
+  maximumMember: 10
+  maximumRankMember:
+    OWNER: 0
+    OFFICER: 2
+    SENIOR: 3
+    RESIDENCE: 10
+  display:
+    OWNER: '왕'
+    OFFICER: '부왕'
+    SENIOR: '기사단장'
+    RESIDENT: '시민'
+territory:
+  worlds:
+    - world
+  maximumHeight: 128
+  castleItemName: '&6성 설치권'
+  outpostItemName: '&6전초기지 설치권'
+  maximumCastleCount: 3
+  maximumOutpostCount: 3
+  nearestDistanceCastleToClaim: 150.0
+  nearestDistanceOutpostToClaim: 30.0
+  castleLength: 100
+  outpostLength: 5
+grade:
+  '1': '길드'
+  '2': '국가'
+  '3': '제국'

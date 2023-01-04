@@ -1,0 +1,8 @@
+name: CrownNations
+main: kr.rendog.nations.bukkit.RendogNationsBukkit
+version: 1.0
+author: Arkarang
+depend:
+  - PalmLibrary
+  - PalmChat
+  - WorldEdit

@@ -1,0 +1,7 @@
+main: kr.rendog.nations.bungee.RendogNationsBungee
+name: CrownNations
+version: 1.0.0
+author: Arkarnag
+depends:
+  - PalmChat
+  - PalmLibrary

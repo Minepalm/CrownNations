@@ -1,0 +1,237 @@
+CREATE:
+  SUCCESS:
+    - '국가 %nation% 을 설립했습니다.'
+  ALERT:
+    - ''
+    - ' [RD] %player% 님이 %nation% 국가를 창설했습니다.'
+    - ''
+  NO_BEACON:
+    - '국가를 설립하는데 필요한 국가 성 아이템 ( 비콘 ) 을 가지고 있지 않습니다.'
+  PREPARE_COMPLETE:
+    - '국가를 만들으려면, 국가 성을 설치하셔야 합니다.'
+    - '이제 비콘을 원하는 위치에 설치해서 국가 성을 건설해보세요.'
+    - '주의 - 국가 성을 설치해야 국가가 샏성 됩니다.'
+  ALREADY_HAS_NATION:
+    - '이미 당신은 소속되어 있는 국가가 있습니다. '
+  ALREADY_NAME_EXIST:
+    - '국가이름 %nation%은 이미 존재하는 국가이름입니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+  INVALID_WORLD:
+    - '국가를 설립 할 수 없는 국가입니다.'
+  TOO_CLOSE:
+    - '국가를 설립하기엔 다른 국가의 거리가 너무 가깝습니다.'
+  DISPLAY_NAME_TOO_LONG:
+    - '이름이 너무 깁니다!'
+  DISPLAY_NAME_BAD_WORD:
+    - '국가 이름에 금지된 키워드가 들어가 있습니다.'
+  INVALID_DISPLAY_NAME:
+    - '올바르지 않은 국가 이름입니다. 영어와 숫자, 한글로 이루어진 국가 명으로 만들어주세요.'
+DISBAND:
+  SUCCESS:
+    - '국가 %nation%을 해산시켯습니다.'
+  ALERT:
+    - ''
+    - ' [RD] %player% 님이 %nation% 국가를 해산시켰습니다.'
+    - ''
+  NATION_NOT_EXISTS:
+    - '당신은 국가에 소속되어 있지 않습니다.'
+  NO_PERMISSION:
+    - '당신은 국가를 삭제할 권한이 없습니다.'
+  OWNER_MISMATCH:
+    - '당신은 국가장이 아닙니다.'
+ADD_MEMBER:
+  ALERT:
+    - ''
+    - '[RD] %target% 님이 새로 국가에 가입하셨습니다.'
+    - ''
+  INVITE_SUCCESS:
+    - '%target% 님에게 초대를 보냈습니다.'
+  INVITE_RECEIVE:
+    - '%player% 님이 당신에게 %nation% 국가 초대를 보냈습니다.'
+    - '초대를 받으시려면 /국가 수락 %nation% 을 입력해주세요.'
+  INVITE_ACCEPT:
+    - '%player% 님의 %nation% 국가 초대를 수락했습니다.'
+  ALERT_ACCEPT:
+    - '%target% 님이 초대를 수락했습니다.'
+  INVALIDATE_INVITATION:
+    - '올바르지 않은 초대장입니다.'
+  INVITE_DENY:
+    - '%taregt% 님이 보낸 %nation% 국가 초대를 거절했습니다.'
+  ALERT_DENY:
+    - '%target% 님이 %nation% 국가 초대를 거절하셨습니다.'
+  INVITE_TIMEOUT:
+    - '%taregt% 님이 보낸 %nation% 국가 초대가 만료되었습니다.'
+  ALERT_INVITE:
+    - '%taregt% 님에게 보낸 %nation% 국가 초대가 만료되었습니다.'
+  NO_INVITATION:
+    - '당신은 해당 국가에서 초대를 받은 적이 없습니다.'
+  NATION_MISMATCH:
+    - '당신은 해당 국가에 소속되어 있지 않습니다.'
+  NO_PERMISSION:
+    - '당신은 국가원을 초대할 권한이 없습니다.'
+  REACH_MAXIMUM_MEMBER:
+    - '국가의 최대 가입 인원수에 도달했습니다.'
+  ALREADY_HAS_NATION:
+    - '%target% 님은 이미 소속된 국가가 있습니다.'
+  PLAYER_NOT_EXISTS:
+    - '%target%은 존재하지 않는 플레이어입니다.'
+  PLAYER_IS__NOT_ONLINE:
+    - '%target%님은 오프라인입니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+  NO_NATION:
+    - '당신은 국가에 가입되어 있지 않습니다.'
+REMOVE_MEMBER:
+  SUCCESSFUL_LEAVE:
+    - '%nation% 국가를 떠나셨습니다.'
+  SUCCESSFUL_KICK:
+    - '%target%님을 국가에서 강퇴시켰습니다.'
+  ALERT_LEAVE:
+    - ''
+    - '[RD] %player%님이 국가를 떠나셨습니다.'
+    - ''
+  ALERT_KICK:
+    - ''
+    - '[RD] %player%님이 %target%님을 강퇴했습니다.'
+    - ''
+  NATION_MISMATCH:
+    - '당신은 해당 국가에 소속되어 있지 않습니다.'
+  NO_PERMISSION:
+    - '당신은 국가 관리자가 아닙니다.'
+  NATION_PLAYER_NOT_EXISTS:
+    - '해당 플레이어는 국가원이 아닙니다.'
+  NO_PERMISSION_THAN_USER:
+    - '해당 플레이어는 당신보다 국가 등급이 높습니다.'
+  PLAYER_NOT_EXISTS:
+    - '%target%은 존재하지 않는 플레이어입니다.'
+  PLAYER_IS__NOT_ONLINE:
+    - '%target%님은 오프라인입니다.'
+  NO_NATION:
+    - '당신은 국가에 가입되어 있지 않습니다.'
+  NATION_OWNER:
+    - '당신은 국가장이여서 국가를 탈퇴할수 없습니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+SET_RANK:
+  SUCCESSFUL:
+    - '플레이어 %target%의 권한을 %rank%로 설정했습니다.'
+  ALERT:
+    - ''
+    - ' [RD] %player%님이 %target%님을 %rank%로 설정했습니다.'
+    - ''
+  NATION_MISMATCH:
+    - '당신은 해당 국가에 소속되어 있지 않습니다.'
+  NO_PERMISSION:
+    - '당신은 국가의 관리자가 아닙니다.'
+  NATION_PLAYER_NOT_EXISTS:
+    - '해당 플레이어는 국가원이 아닙니다.'
+  NO_PERMISSION_THAN_USER:
+    - '해당 플레이어는 당신보다 국가 등급이 높습니다.'
+  INVALID_RANK:
+    - '해당 등급으로는 설정할수 없습니다.'
+  PLAYER_NOT_EXISTS:
+    - '%target%은 존재하지 않는 플레이어입니다.'
+  PLAYER_IS__NOT_ONLINE:
+    - '%target%님은 오프라인입니다.'
+  NO_NATION:
+    - '당신은 국가에 가입되어 있지 않습니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+TRANSFER:
+  SUCCESSFUL:
+    - ''
+  ALERT:
+    - '%player% 님이 %target% 님에게 %nation% 국가를 위임했습니다.'
+  NATION_MISMATCH:
+    - '당신은 해당 국가에 소속되어 있지 않습니다.'
+  NO_PERMISSION:
+    - '당신은 위임할 권한이 없습니다.'
+  NATION_PLAYER_NOT_EXISTS:
+    - '%target% 님은 위임하려는 국가의 국가원이 아닙니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+DEPOSIT:
+  SUCCESSFUL:
+    - ' %nation% 국가에 %amount% 원을 국가에 입금했습니다. 현재 국가 금고: %after%'
+  NO_NATION:
+    - '당신은 국가에 소속되어 있지 않습니다.'
+  NATION_MISMATCH:
+    - '입금하려는 국가와 당신의 국가가 일치하지 않습니다.'
+  INVALID_AMOUNT:
+    - '0 이상의 금액을 입력해주세요.'
+  EXCEEDED_AMOUNT:
+    - '입금 가능한 최대 금액을 초과했습니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+WITHDRAW:
+  SUCCESSFUL:
+    - ' %nation% 국가에 %amount% 원을 국가에 출금했습니다. 현재 국가 금고: %after%'
+  NO_NATION:
+    - '당신은 국가에 소속되어 있지 않습니다.'
+  NATION_MISMATCH:
+    - '출금하려는 국가와 당신의 국가가 일치하지 않습니다.'
+  INVALID_AMOUNT:
+    - '0 이상의 금액을 입력해주세요.'
+  EXCEEDED_AMOUNT:
+    - '출금 가능한 최대 금액을 초과했습니다.'
+CLAIM_CASTLE:
+  SUCCESSFUL:
+    - '성공적으로 국가 성을 설치했습니다.'
+  INVALID_WORLD:
+    - '이 곳은 국가 야생이 아닙니다.'
+  NO_NATION:
+    - '성을 설치하기 위해선 먼저 국가를 설립해야 합니다.'
+  TOO_CLOSE:
+    - '성을 설치하기에는 다른 성과 거리가 너무 가깝습니다.'
+  TOO_HIGH:
+    - '이 위치는 성을 설치하기엔 너무나 높습니다.'
+  NATION_MISMATCH:
+    - '설정하려는 국가와 당신의 국가가 일치하지 않습니다. 관리자에게 문의해주세요.'
+  REACH_MAX_CASTLE:
+    - '설치 가능한 최대 성 개수 제한에 도달했습니다.'
+  NO_PERMISSION:
+    - '국가 성을 설치하려면 해당 국가의 왕이여야 합니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+CLAIM_OUTPOST:
+  SUCCESSFUL:
+    - '성공적으로 전초기지를 설치했습니다.'
+  INVALID_WORLD:
+    - '이 곳은 국가 야생이 아닙니다.'
+  NO_NATION:
+    - '전초기지를 설치하기 위해선 먼저 국가에 가입되어야 합니다.'
+  TOO_CLOSE:
+    - '전초기지를 설치하기에는 다른 성과 전초기지와 거리가 너무 가깝습니다.'
+  NATION_MISMATCH:
+    - '설정하려는 국가와 당신의 국가가 일치하지 않습니다. 관리자에게 문의해주세요.'
+  REACH_MAX_OUTPOST:
+    - '설치 가능한 최대 전초기지 개수 제한에 도달했습니다.'
+  NO_PERMISSION:
+    - '국가 전초기지를 설치하려면 해당 국가의 왕이여야 합니다.'
+  ERROR:
+    - '명령어 실행 중 오류가 발생했습니다. 관리자에게 문의해주세요.'
+    - '오류 메세지: %error%'
+HELP:
+  1:
+    - ''
+  2:
+    - ''
+  3:
+    - ''
+INFO:
+  INFO:
+    - '국가명: %nation%'
+    - '국가장: %owner%'
+    - '국가원: %members%'
+  NATION_NOT_FOUND:
+    - '그런 국가를 찾을수 없어요.'
+  NO_NATION:
+    - '국가에 소속되어 있지 않아요.'
