@@ -1,6 +1,7 @@
 name: CrownNations
-main: kr.rendog.nations.bukkit.RendogNationsBukkit
+main: com.minepalm.nations.bukkit.CrownNationsBukkit
 version: 1.0
+api-version: 1.19
 author: Arkarang
 depend:
   - PalmLibrary

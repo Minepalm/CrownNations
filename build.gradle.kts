@@ -32,12 +32,14 @@ allprojects {
     dependencies {
         compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
 
-        compileOnly("com.minepalm:PalmLibrary-Database:1.0-SNAPSHOT")
-        compileOnly("com.minepalm:PalmLibrary-Network:1.0-SNAPSHOT")
-        compileOnly("com.minepalm:PalmLibrary-dependencies:1.0-SNAPSHOT")
+        compileOnly("com.minepalm:PalmLibrary-Database:1.1-SNAPSHOT")
+        compileOnly("com.minepalm:PalmLibrary-Network:1.1-SNAPSHOT")
+        compileOnly("com.minepalm:PalmLibrary-dependencies:1.1-SNAPSHOT")
         compileOnly("com.minepalm:syncer-player:1.19-1.0-SNAPSHOT")
         compileOnly("com.minepalm:BungeeJump:1.19-1.0-SNAPSHOT")
-        compileOnly("com.minepalm:palmchat-api:1.19-1.1-SNAPSHOT")
+        compileOnly("com.minepalm:palmchat-api:1.19-1.2.1-SNAPSHOT")
+
+        compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
 
         compileOnly("com.google.guava:guava:31.1-jre")
         compileOnly("io.netty:netty-buffer:4.1.86.Final")

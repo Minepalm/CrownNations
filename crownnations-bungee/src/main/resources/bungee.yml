@@ -1,4 +1,4 @@
-main: kr.rendog.nations.bungee.RendogNationsBungee
+main: com.minepalm.nations.bungee.CrownNationsBungee
 name: CrownNations
 version: 1.0.0
 author: Arkarnag

@@ -1,8 +1,15 @@
+plugins {
+    id("java")
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow")
+    id("io.papermc.paperweight.userdev")
+}
 
 apply(plugin = "io.papermc.paperweight.userdev")
 
 group = rootProject.group
 version = rootProject.version
+
 
 repositories{
     maven{
@@ -26,5 +33,13 @@ dependencies {
 
     compileOnly("com.sk89q.worldedit:worldedit-core:7.3.0-SNAPSHOT"){ isTransitive = true }
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0-SNAPSHOT"){ isTransitive = true }
+}
 
+
+tasks.jar {
+    dependsOn("reobfJar")
+}
+
+tasks.reobfJar {
+    outputJar.set(layout.buildDirectory.file("libs/${project.name}-${project.version}.jar"))
 }
