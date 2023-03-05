@@ -1,10 +1,13 @@
-package com.minepalm.nations.core.bank
+package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
+import com.minepalm.nations.core.bank.EconomyAdapter
 import com.minepalm.nations.core.operation.AbstractNationOperation
+import com.minepalm.nations.event.NationWithdrawEvent
 
 class OperationWithdraw(
     private val service: NationService,
+    private val economy: EconomyAdapter,
     private val nation: Nation,
     private val commander: NationMember,
     private val reason: String,
@@ -36,7 +39,7 @@ class OperationWithdraw(
     }
 
     override fun process0() {
-        val event = com.minepalm.nations.event.NationWithdrawEvent(nation.id, reason, amount)
+        val event = NationWithdrawEvent(nation.id, reason, amount)
 
         service.localEventBus.invoke(event)
         if (event.cancelled) {
@@ -44,6 +47,6 @@ class OperationWithdraw(
         }
 
         val after = nation.bank.withdraw(reason, amount).join()
-        success(ResultCode.SUCCESSFUL, after)
+        success(after)
     }
 }

@@ -3,14 +3,18 @@ package com.minepalm.nations.core.operation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationRank
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.config.TerritoryConfiguration
+import com.minepalm.nations.event.TerritoryPreClaimEvent
+import com.minepalm.nations.territory.*
+import com.minepalm.nations.utils.ServerLoc
 
 class OperationClaimOutpost(
-    private val service: com.minepalm.nations.territory.NationTerritoryService,
-    private val config: com.minepalm.nations.config.TerritoryConfiguration,
-    private val territory: com.minepalm.nations.territory.NationTerritory,
-    private val location: com.minepalm.nations.utils.ServerLoc,
+    private val service: NationTerritoryService,
+    private val config: TerritoryConfiguration,
+    private val territory: NationTerritory,
+    private val location: ServerLoc,
     private val commander: NationMember
-) : AbstractNationOperation<com.minepalm.nations.territory.NationOutpost>() {
+) : AbstractNationOperation<NationOutpost>() {
 
     private val nation = territory.nation
 
@@ -59,14 +63,16 @@ class OperationClaimOutpost(
     }
 
     override fun process0() {
-        val range = com.minepalm.nations.territory.ProtectionRange(
-            location.setX(location.x - config.outpostLength / 2).setZ(location.z - config.outpostLength / 2),
+        val range = ProtectionRange(
+            location.setX(location.x - config.outpostLength / 2).setZ(location.z - config.outpostLength / 2)
+                .setY(location.y - 1),
             location.setX(location.x + config.outpostLength / 2).setZ(location.z + config.outpostLength / 2)
+                .setZ(config.outpostLength)
         )
-        val schema = com.minepalm.nations.territory.MonumentSchema(-1, nation.id, "OUTPOST", location, range)
+        val schema = MonumentSchema(-1, nation.id, "OUTPOST", location, range)
 
 
-        val event = com.minepalm.nations.event.TerritoryPreClaimEvent(nation.id, "OUTPOST", location)
+        val event = TerritoryPreClaimEvent(nation.id, "OUTPOST", location)
         service.root.localEventBus.invoke(event)
 
         if (event.cancelled) {
@@ -74,7 +80,7 @@ class OperationClaimOutpost(
         }
 
         service.root.network.send(event)
-        success(ResultCode.SUCCESSFUL, service.create(schema).join() as com.minepalm.nations.territory.NationOutpost)
+        success(service.create(schema).join() as NationOutpost)
     }
 
 

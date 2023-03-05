@@ -2,46 +2,49 @@ package com.minepalm.nations.core.territory
 
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationOperation
+import com.minepalm.nations.config.TerritoryConfiguration
 import com.minepalm.nations.core.operation.*
+import com.minepalm.nations.territory.*
+import com.minepalm.nations.utils.ServerLoc
 
 class TerritoryOperationFactoryImpl(
-    private val service: com.minepalm.nations.territory.NationTerritoryService,
-    private val config: com.minepalm.nations.config.TerritoryConfiguration
-) : com.minepalm.nations.territory.TerritoryOperationFactory {
+    private val service: NationTerritoryService,
+    private val config: TerritoryConfiguration
+) : TerritoryOperationFactory {
     override fun buildOperateClaimCastleNationCreate(
         commander: NationMember,
-        loc: com.minepalm.nations.utils.ServerLoc
-    ): NationOperation<com.minepalm.nations.territory.NationCastle> {
+        loc: ServerLoc
+    ): NationOperation<NationCastle> {
         return OperationClaimCastleAsNationCreate(service, config, loc, commander)
     }
 
     override fun buildOperateModify(
-        monument: com.minepalm.nations.territory.NationMonument,
+        monument: NationMonument,
         commander: NationMember,
-        action: com.minepalm.nations.territory.NationAction,
-        loc: com.minepalm.nations.utils.ServerLoc
+        action: NationAction,
+        loc: ServerLoc
     ): NationOperation<Boolean> {
         return OperationTerritoryModify(service, monument, action, loc, commander)
     }
 
     override fun buildOperateClaimCastle(
-        territory: com.minepalm.nations.territory.NationTerritory,
+        territory: NationTerritory,
         commander: NationMember,
-        loc: com.minepalm.nations.utils.ServerLoc
-    ): NationOperation<com.minepalm.nations.territory.NationCastle> {
+        loc: ServerLoc
+    ): NationOperation<NationCastle> {
         return OperationClaimCastle(service, config, territory, loc, commander)
     }
 
     override fun buildOperateClaimOutpost(
-        territory: com.minepalm.nations.territory.NationTerritory,
+        territory: NationTerritory,
         commander: NationMember,
-        loc: com.minepalm.nations.utils.ServerLoc
-    ): NationOperation<com.minepalm.nations.territory.NationOutpost> {
+        loc: ServerLoc
+    ): NationOperation<NationOutpost> {
         return OperationClaimOutpost(service, config, territory, loc, commander)
     }
 
     override fun buildOperationDecomposeCastle(
-        monument: com.minepalm.nations.territory.NationCastle,
+        monument: NationCastle,
         commander: NationMember,
         reason: String
     ): NationOperation<Boolean> {
@@ -49,7 +52,7 @@ class TerritoryOperationFactoryImpl(
     }
 
     override fun buildOperationDecomposeOutpost(
-        monument: com.minepalm.nations.territory.NationOutpost,
+        monument: NationOutpost,
         commander: NationMember,
         reason: String
     ): NationOperation<Boolean> {

@@ -6,6 +6,8 @@ import com.minepalm.nations.NationRank
 import com.minepalm.nations.config.GradeConfiguration
 import com.minepalm.nations.config.MemberConfiguration
 import com.minepalm.nations.config.TerritoryConfiguration
+import com.minepalm.nations.utils.DeleteRange
+import com.minepalm.nations.utils.SchematicOffset
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.config.Configuration
 
@@ -25,16 +27,29 @@ class BungeeYamlConfiguration(plugin: Plugin)
     ) : TerritoryConfiguration {
 
         override val worlds: List<String> = mutableListOf()
-            //config.getStringList("worlds")
+
+        //config.getStringList("worlds")
         override val maximumCastleCount: Int = config.getInt("maximumCastleCount", 3)
         override val maximumOutpostCount: Int = config.getInt("maximumOutpostCount", 5)
         override val nearestDistanceCastleToClaim: Double = config.getDouble("nearestDistanceCastleToClaim", 150.0)
         override val nearestDistanceOutpostToClaim: Double = config.getDouble("nearestDistanceOutpostToClaim", 30.0)
         override val maximumHeight = config.getInt("maximumHeight")
-        override val castleLength: Int = config.getInt("castleLength", 100)
+        override val castleLength: Int = config.getInt("castleLength", 51)
         override val outpostLength: Int = config.getInt("outpostLength", 5)
         override val castleItemName: String = config.getString("castleItemName").replace("&", "§")
         override val outpostItemName: String = config.getString("outpostItemName").replace("&", "§")
+
+        override fun getSchematic(type: String): String {
+            throw IllegalAccessException("Proxy cannot get schematic")
+        }
+
+        override fun getSchematicOffset(type: String): SchematicOffset {
+            throw IllegalAccessException("Proxy cannot get monument offset")
+        }
+
+        override fun getDeleteRange(type: String): DeleteRange {
+            throw IllegalAccessException("Proxy cannot get monument delete range")
+        }
     }
 
     class Member(

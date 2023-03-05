@@ -23,7 +23,7 @@ class MySQLNationGradeDatabase(
     }
 
     fun getGrade(nationId: Int): CompletableFuture<Int> {
-        return database.executeAsync<Int> { connection ->
+        return database.executeAsync { connection ->
             connection.prepareStatement("SELECT `level` FROM $table WHERE `nation_id`=?")
                 .apply { setInt(1, nationId) }
                 .executeQuery()
@@ -37,7 +37,7 @@ class MySQLNationGradeDatabase(
     }
 
     fun setGrade(nation: Int, level: Int): CompletableFuture<Unit> {
-        return database.executeAsync<Unit> { connection ->
+        return database.executeAsync { connection ->
             connection.prepareStatement(
                 "INSERT INTO $table (`nation_id`, `level`) VALUES(?, ?) " +
                         "ON DUPLICATE KEY UPDATE `level`=VALUES(`level`)"

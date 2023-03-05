@@ -6,13 +6,14 @@ import com.minepalm.nations.*
 import com.minepalm.nations.bank.NationBankRegistry
 import com.minepalm.nations.config.NationConfigurations
 import com.minepalm.nations.core.mysql.*
-import com.minepalm.nations.core.network.RendogNationNetwork
+import com.minepalm.nations.core.network.CrownNationNetwork
 import com.minepalm.nations.core.operation.OperationNationFoundation
 import com.minepalm.nations.grade.NationGradeService
 import com.minepalm.nations.server.NationNetwork
 import com.minepalm.nations.territory.NationTerritoryService
 import com.minepalm.nations.war.NationWarService
 import java.time.Duration
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -59,26 +60,32 @@ class PalmNationsService(
     private val loopExecutor: ExecutorService
     private val updateExecutor: ExecutorService
 
-    init{
+    init {
         memberExecutorThreadPool = Executors.newCachedThreadPool()
         nationExecutorThreadPool = Executors.newCachedThreadPool()
         loopExecutor = Executors.newSingleThreadExecutor()
         updateExecutor = Executors.newCachedThreadPool()
 
-        nationServerDatabase = MySQLNationServerDatabase(nationsSource, "rendognations_servers")
-        adminDatabase = MySQLAdminDatabase(nationsSource, "rendognations_admins")
-        nationIdDatabase = MySQLNationIdDatabase(nationsSource, "rendognations_ids")
-        nationDataDatabase = MySQLNationDataDatabase(nationsSource, "rendognations_nation_data")
-        nationMemberDataDatabase = MySQLNationMemberDatabase(membersSource, "rendognations_members")
+        nationServerDatabase = MySQLNationServerDatabase(nationsSource, "crownnations_servers")
+        adminDatabase = MySQLAdminDatabase(nationsSource, "crownnations_admins")
+        nationIdDatabase = MySQLNationIdDatabase(nationsSource, "crownnations_ids")
+        nationDataDatabase = MySQLNationDataDatabase(nationsSource, "crownnations_nation_data")
+        nationMemberDataDatabase = MySQLNationMemberDatabase(membersSource, "crownnations_members")
 
-        network = RendogNationNetwork(networkModule, nationServerDatabase)
+        network = CrownNationNetwork(networkModule, nationServerDatabase)
         admins = NationAdmins(adminDatabase, network)
 
         localEventBus = PalmLocalEventBus(network)
         remoteEventBus = PalmEventBus()
 
         memberFactory = PalmNationMemberFactory(this, nationMemberDataDatabase, admins, memberExecutorThreadPool)
-        nationFactory = PalmNationFactory(nationDataDatabase, nationMemberDataDatabase, nationIdDatabase, this, nationExecutorThreadPool)
+        nationFactory = PalmNationFactory(
+            nationDataDatabase,
+            nationMemberDataDatabase,
+            nationIdDatabase,
+            this,
+            nationExecutorThreadPool
+        )
         val cleaner = PalmNationRegistryCleaner(this, loopExecutor, Duration.ofMinutes(5), 50L)
 
         memberRegistry = PalmNationMemberRegistry(memberFactory, memberExecutorThreadPool)
@@ -91,11 +98,15 @@ class PalmNationsService(
 
     override fun createNewNation(name: String): Nation? {
         val newNationId = nationIdDatabase.generateNewId(name).join()
-        return if(newNationId == -1){
+        return if (newNationId == -1) {
             null
-        }else{
+        } else {
             nationFactory.build(newNationId, name).join()
         }
+    }
+
+    override fun forceDelete(id: Int): CompletableFuture<Boolean> {
+        return nationIdDatabase.deleteId(id)
     }
 
     override fun shutdown() {

@@ -74,10 +74,22 @@ class MySQLBankDatabase(
     }
 
     fun takeMoney(nationId: Int, value: Double): CompletableFuture<Double> {
-        return database.executeAsync<Double> { connection ->
+        return database.executeAsync { connection ->
             try {
                 connection.autoCommit = false
-                connection.prepareStatement("UPDATE $table SET `balance` = VALUES(`balance`) - ? WHERE `nation_id`=?")
+
+                val exists = connection.prepareStatement("SELECT `nation_id` FROM $table WHERE `nation_id`=?")
+                    .apply { setInt(1, nationId) }.executeQuery().next()
+
+                if (!exists) {
+                    connection.prepareStatement("INSERT INTO $table (`nation_id`, `balance`) VALUES(?, ?)")
+                        .apply {
+                            setInt(1, nationId)
+                            setDouble(2, 0.0)
+                        }.execute()
+                }
+
+                connection.prepareStatement("UPDATE $table SET `balance` = `balance` - ? WHERE `nation_id`=?")
                     .apply {
                         setDouble(1, value)
                         setInt(2, nationId)
@@ -102,7 +114,19 @@ class MySQLBankDatabase(
         return database.executeAsync<Double> { connection ->
             try {
                 connection.autoCommit = false
-                connection.prepareStatement("UPDATE $table SET `balance` = VALUES(`balance`) + ? WHERE `nation_id`=?")
+
+                val exists = connection.prepareStatement("SELECT `nation_id` FROM $table WHERE `nation_id`=?")
+                    .apply { setInt(1, nationId) }.executeQuery().next()
+
+                if (!exists) {
+                    connection.prepareStatement("INSERT INTO $table (`nation_id`, `balance`) VALUES(?, ?)")
+                        .apply {
+                            setInt(1, nationId)
+                            setDouble(2, 0.0)
+                        }.execute()
+                }
+
+                connection.prepareStatement("UPDATE $table SET `balance` = `balance` + ? WHERE `nation_id`=?")
                     .apply {
                         setDouble(1, value)
                         setInt(2, nationId)

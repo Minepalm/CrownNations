@@ -6,12 +6,7 @@ import com.minepalm.nations.NationService
 import com.minepalm.nations.bukkit.PlayerCache
 import com.minepalm.nations.bukkit.message.ResultMessage
 import com.minepalm.nations.bukkit.message.ResultPrinter
-import com.minepalm.palmchat.api.*
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
+import com.minepalm.palmchat.api.ChatService
 import java.util.concurrent.ExecutorService
 
 class MemberInvitationStrategy(
@@ -41,10 +36,6 @@ class MemberInvitationStrategy(
 
         receiverChannel.session().system()
                 .send(printer.chatText(ResultMessage("INVITE_RECEIVE", data = map)))
-    }
-
-    private fun ChatSession.kyori(msg: Component){
-        send(ChatText(TextType.KYORI, ResultPrinter.kyori.serialize(msg)))
     }
 
     override fun onAccept(invitation: Invitation) {

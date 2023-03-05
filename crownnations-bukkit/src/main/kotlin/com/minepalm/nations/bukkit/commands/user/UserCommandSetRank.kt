@@ -49,7 +49,7 @@ class UserCommandSetRank(
             return OperationResult(ResultCode.PLAYER_NOT_EXISTS, false)
         }
 
-        if(players.isOnline(username)){
+        if (!players.isOnline(username)) {
             return OperationResult(ResultCode.PLAYER_NOT_ONLINE, false)
         }
 

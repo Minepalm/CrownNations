@@ -1,6 +1,7 @@
 package com.minepalm.nations.core.network
 
 import com.minepalm.library.network.api.HelloExecutor
+import com.minepalm.nations.event.*
 
 sealed class EventExecutor {
 
@@ -18,10 +19,10 @@ sealed class EventExecutor {
 
     class Create(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationCreateEvent> {
-        override val identifier: String = com.minepalm.nations.event.NationCreateEvent::class.java.simpleName
+    ) : HelloExecutor<NationCreateEvent> {
+        override val identifier: String = NationCreateEvent::class.java.simpleName
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationCreateEvent) {
+        override fun executeReceived(event: NationCreateEvent) {
             gateway.handle(event)
         }
 
@@ -29,10 +30,10 @@ sealed class EventExecutor {
 
     class Disband(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationDisbandEvent> {
-        override val identifier: String = com.minepalm.nations.event.NationDisbandEvent::class.java.simpleName
+    ) : HelloExecutor<NationDisbandEvent> {
+        override val identifier: String = NationDisbandEvent::class.java.simpleName
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationDisbandEvent) {
+        override fun executeReceived(event: NationDisbandEvent) {
             gateway.handle(event)
         }
 
@@ -40,11 +41,11 @@ sealed class EventExecutor {
 
     class MetadataChange(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationMetadataChangeEvent> {
-        override val identifier: String = com.minepalm.nations.event.NationMetadataChangeEvent::class.java.simpleName
+    ) : HelloExecutor<NationMetadataChangeEvent> {
+        override val identifier: String = NationMetadataChangeEvent::class.java.simpleName
 
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationMetadataChangeEvent) {
+        override fun executeReceived(event: NationMetadataChangeEvent) {
             gateway.handle(event)
         }
 
@@ -52,11 +53,11 @@ sealed class EventExecutor {
 
     class RemoveMember(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationRemoveMemberEvent> {
+    ) : HelloExecutor<NationRemoveMemberEvent> {
 
-        override val identifier: String = com.minepalm.nations.event.NationRemoveMemberEvent::class.java.simpleName
+        override val identifier: String = NationRemoveMemberEvent::class.java.simpleName
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationRemoveMemberEvent) {
+        override fun executeReceived(event: NationRemoveMemberEvent) {
             gateway.handle(event)
         }
 
@@ -64,10 +65,10 @@ sealed class EventExecutor {
 
     class SetRank(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationSetRankEvent> {
-        override val identifier: String = com.minepalm.nations.event.NationSetRankEvent::class.java.simpleName
+    ) : HelloExecutor<NationSetRankEvent> {
+        override val identifier: String = NationSetRankEvent::class.java.simpleName
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationSetRankEvent) {
+        override fun executeReceived(event: NationSetRankEvent) {
             gateway.handle(event)
         }
 
@@ -75,10 +76,10 @@ sealed class EventExecutor {
 
     class Update(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationUpdateEvent> {
+    ) : HelloExecutor<NationUpdateEvent> {
         override val identifier: String = "NationUpdateEvent"
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationUpdateEvent) {
+        override fun executeReceived(event: NationUpdateEvent) {
             gateway.handle(event)
         }
 
@@ -86,10 +87,10 @@ sealed class EventExecutor {
 
     class Transfer(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationTransferEvent> {
-        override val identifier: String = com.minepalm.nations.event.NationTransferEvent::class.java.simpleName
+    ) : HelloExecutor<NationTransferEvent> {
+        override val identifier: String = NationTransferEvent::class.java.simpleName
 
-        override fun executeReceived(event: com.minepalm.nations.event.NationTransferEvent) {
+        override fun executeReceived(event: NationTransferEvent) {
             gateway.handle(event)
         }
 
@@ -97,10 +98,10 @@ sealed class EventExecutor {
 
     class GradeUpdate(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationGradeUpdateEvent> {
+    ) : HelloExecutor<NationGradeUpdateEvent> {
         override val identifier: String = "NationGradeUpdateEvent"
 
-        override fun executeReceived(p0: com.minepalm.nations.event.NationGradeUpdateEvent) {
+        override fun executeReceived(p0: NationGradeUpdateEvent) {
             gateway.handle(p0)
         }
 
@@ -108,10 +109,10 @@ sealed class EventExecutor {
 
     class Promote(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.NationPromoteEvent> {
+    ) : HelloExecutor<NationPromoteEvent> {
         override val identifier: String = "NationPromoteEvent"
 
-        override fun executeReceived(p0: com.minepalm.nations.event.NationPromoteEvent) {
+        override fun executeReceived(p0: NationPromoteEvent) {
             gateway.handle(p0)
         }
 
@@ -119,10 +120,10 @@ sealed class EventExecutor {
 
     class Claim(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.TerritoryPostClaimEvent> {
+    ) : HelloExecutor<TerritoryPostClaimEvent> {
         override val identifier: String = "TerritoryPostClaimEvent"
 
-        override fun executeReceived(p0: com.minepalm.nations.event.TerritoryPostClaimEvent) {
+        override fun executeReceived(p0: TerritoryPostClaimEvent) {
             gateway.handle(p0)
         }
 
@@ -130,10 +131,10 @@ sealed class EventExecutor {
 
     class Decompose(
         val gateway: EventBusGateway
-    ) : HelloExecutor<com.minepalm.nations.event.TerritoryDecomposeEvent> {
+    ) : HelloExecutor<TerritoryDecomposeEvent> {
         override val identifier: String = "TerritoryDecomposeEvent"
 
-        override fun executeReceived(p0: com.minepalm.nations.event.TerritoryDecomposeEvent) {
+        override fun executeReceived(p0: TerritoryDecomposeEvent) {
             gateway.handle(p0)
         }
 

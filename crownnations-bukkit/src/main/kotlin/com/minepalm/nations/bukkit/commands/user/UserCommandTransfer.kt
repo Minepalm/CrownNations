@@ -25,22 +25,19 @@ class UserCommandTransfer(
             val nationFuture = service.memberRegistry[player.uniqueId].direct.getNation()
             val result = execute(player, transferTo, uuid, nationFuture)
 
-            if(result.code == ResultCode.SUCCESSFUL) {
-
-                val messageCode = when {
-                    printer.containsMessage(result.code) -> result.code
-                    else -> "ERROR"
-                }
-
-                val resultMessage = ResultMessage(messageCode, result).apply {
-                    set("player", player.name)
-                    set("nation", nationFuture.join()?.name ?: "")
-                    set("target", transferTo)
-                }
-
-                player.sendMessage(printer.build(resultMessage))
-
+            val messageCode = when {
+                printer.containsMessage(result.code) -> result.code
+                else -> "ERROR"
             }
+
+            val resultMessage = ResultMessage(messageCode, result).apply {
+                set("player", player.name)
+                set("nation", nationFuture.join()?.name ?: "")
+                set("target", transferTo)
+            }
+
+            player.sendMessage(printer.build(resultMessage))
+
         }
     }
 
@@ -50,15 +47,11 @@ class UserCommandTransfer(
             return OperationResult(ResultCode.PLAYER_NOT_EXISTS, false)
         }
 
-        if(players.isOnline(transferTo)){
+        if (!players.isOnline(transferTo)) {
             return OperationResult(ResultCode.PLAYER_NOT_ONLINE, false)
         }
 
-        val nation = nationFuture.join()
-
-        if(nation == null){
-            return OperationResult(ResultCode.NATION_NOT_EXISTS, false)
-        }
+        val nation = nationFuture.join() ?: return OperationResult(ResultCode.NATION_NOT_EXISTS, false)
 
         return nation.operateTransferOwner(service.memberRegistry[player.uniqueId], uuid).process()
     }

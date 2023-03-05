@@ -1,5 +1,8 @@
 package com.minepalm.nations.config
 
+import com.minepalm.nations.utils.DeleteRange
+import com.minepalm.nations.utils.SchematicOffset
+
 interface TerritoryConfiguration {
 
     val worlds: List<String>
@@ -21,4 +24,10 @@ interface TerritoryConfiguration {
     val castleItemName: String
 
     val outpostItemName: String
+
+    fun getSchematic(type: String): String
+
+    fun getSchematicOffset(type: String): SchematicOffset
+
+    fun getDeleteRange(type: String): DeleteRange
 }

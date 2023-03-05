@@ -1,6 +1,7 @@
 package com.minepalm.nations.territory
 
 import com.minepalm.nations.Nation
+import com.minepalm.nations.utils.ServerLoc
 import java.util.concurrent.CompletableFuture
 
 interface NationWorld {
@@ -27,7 +28,7 @@ interface NationWorld {
 
         fun remove(monumentId: Int)
 
-        operator fun get(loc: com.minepalm.nations.utils.ServerLoc): NationMonument?
+        operator fun get(loc: ServerLoc): NationMonument?
 
         operator fun get(id: Int): NationMonument?
 

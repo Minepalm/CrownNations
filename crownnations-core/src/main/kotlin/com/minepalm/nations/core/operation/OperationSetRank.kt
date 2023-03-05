@@ -1,6 +1,7 @@
 package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
+import com.minepalm.nations.event.NationSetRankEvent
 
 class OperationSetRank(
     val nation: Nation,
@@ -28,7 +29,7 @@ class OperationSetRank(
                 fail(ResultCode.NATION_PLAYER_NOT_EXISTS, "해당 플레이어는 국가원이 아닙니다.")
             }
 
-            if (commanderRank.hasPermissibleOf(rankFuture.join())) {
+            if (!commanderRank.hasPermissibleOf(rankFuture.join())) {
                 fail(ResultCode.NO_PERMISSION_THAN_USER, "해당 플레이어는 당신보다 국가 등급이 높습니다.")
             }
 
@@ -37,6 +38,13 @@ class OperationSetRank(
                 || rank == NationRank.NONE
             ) {
                 fail(ResultCode.INVALID_RANK, "해당 등급으로는 설정할수 없습니다.")
+            }
+
+            service.config.member.getMaximumMember(rank).let { max ->
+                val size = nation.cache.getRanks().filter { it.value == rank }.size
+                if (size >= max) {
+                    fail(ResultCode.REACH_MAXIMUM_MEMBER_RANK, "해당 등급의 최대 멤버 수를 초과했습니다.")
+                }
             }
         }
     }
@@ -52,7 +60,7 @@ class OperationSetRank(
     override fun process0() {
         setResult(false)
 
-        val event = com.minepalm.nations.event.NationSetRankEvent(nation.id, commander.uniqueId, user.uniqueId, rank)
+        val event = NationSetRankEvent(nation.id, commander.uniqueId, user.uniqueId, rank)
         service.localEventBus.invoke(event)
 
         if (event.cancelled) {
@@ -66,7 +74,7 @@ class OperationSetRank(
         }
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
     }
 
 }

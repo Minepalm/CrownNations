@@ -1,10 +1,13 @@
-package com.minepalm.nations.core.bank
+package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
+import com.minepalm.nations.core.bank.EconomyAdapter
 import com.minepalm.nations.core.operation.AbstractNationOperation
+import com.minepalm.nations.event.NationDepositEvent
 
 class OperationDeposit(
     private val service: NationService,
+    private val economy: EconomyAdapter,
     private val nation: Nation,
     private val commander: NationMember,
     private val reason: String,
@@ -30,15 +33,15 @@ class OperationDeposit(
     }
 
     override fun process0() {
-        val event = com.minepalm.nations.event.NationDepositEvent(nation.id, reason, amount)
+        val event = NationDepositEvent(nation.id, reason, amount)
 
-        service.localEventBus.invoke(event) {
-            if (event.cancelled) {
-                fail(ResultCode.EVENT_CANCELLED, "")
-            }
-
-            val after = nation.bank.deposit(reason, amount).join()
-            success(ResultCode.SUCCESSFUL, after)
+        service.localEventBus.invoke(event)
+        if (event.cancelled) {
+            fail(ResultCode.EVENT_CANCELLED, "")
         }
+
+        val after = nation.bank.deposit(reason, amount).join()
+        success(after)
+
     }
 }

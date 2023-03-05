@@ -19,7 +19,7 @@ class OperationTerritoryModify(
     }
 
     override fun process0() {
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
     }
 
 }

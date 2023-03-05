@@ -32,9 +32,28 @@ object Placeholders {
         }
     }
 
+    val NATION_OFFICERS = object : Replace {
+        override fun replace(origin: String, message: ResultMessage): String {
+            return origin.replace("%officers%", message["officers"])
+        }
+    }
+
+    val MONEY = object : Replace {
+        override fun replace(origin: String, message: ResultMessage): String {
+            return origin.replace("%money%", message["money"])
+        }
+    }
+
     val RANK = object : Replace {
         override fun replace(origin: String, message: ResultMessage): String {
             return origin.replace("%rank%", message["rank"])
+        }
+    }
+
+
+    val AMOUNT = object : Replace {
+        override fun replace(origin: String, message: ResultMessage): String {
+            return origin.replace("%amount%", message["amount"])
         }
     }
 

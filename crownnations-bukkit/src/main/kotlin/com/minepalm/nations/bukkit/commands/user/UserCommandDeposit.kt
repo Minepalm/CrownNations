@@ -35,7 +35,7 @@ class UserCommandDeposit(
                     set("player", player.name)
                     set("nation", player.member().cache.getNation()?.name ?: "알수 없는 국가")
                     set("amount", "${amount.toInt()}")
-                    set("after", "${result.result?.toInt()}")
+                    set("money", "${result.result?.toInt()}")
                 }
 
                 player.sendMessage(printer.build(resultMessage))

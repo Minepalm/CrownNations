@@ -3,6 +3,7 @@ package com.minepalm.nations.core.operation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationService
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.event.NationRemoveMemberEvent
 
 class OperationLeave(
     private val commander: NationMember,
@@ -27,20 +28,16 @@ class OperationLeave(
         setResult(false)
 
         val nation = commander.direct.getNation()
-        val event = com.minepalm.nations.event.NationRemoveMemberEvent(
-            nation.join()!!.id,
-            commander.uniqueId,
-            commander.uniqueId,
-            "LEAVE"
-        )
+        val event = NationRemoveMemberEvent(nation.join()!!.id, commander.uniqueId, commander.uniqueId, "LEAVE")
         service.localEventBus.invoke(event)
 
         if (event.cancelled) {
             fail(ResultCode.EVENT_CANCELLED, "")
         }
 
+        nation.join()!!.unsafe.removeMember(commander.uniqueId).join()
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
     }
 
 }

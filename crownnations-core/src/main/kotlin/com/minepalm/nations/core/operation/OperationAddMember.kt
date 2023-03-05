@@ -1,6 +1,7 @@
 package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
+import com.minepalm.nations.event.NationAddMemberEvent
 
 class OperationAddMember(
     val nation: Nation,
@@ -17,7 +18,7 @@ class OperationAddMember(
     override fun process0() {
         setResult(false)
 
-        val event = com.minepalm.nations.event.NationAddMemberEvent(nation.id, commander.uniqueId, user.uniqueId)
+        val event = NationAddMemberEvent(nation.id, commander.uniqueId, user.uniqueId)
         service.localEventBus.invoke(event)
 
         if (event.cancelled) {
@@ -31,7 +32,7 @@ class OperationAddMember(
         }
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
 
     }
 
@@ -53,7 +54,7 @@ class OperationAddMember(
                 fail(ResultCode.REACH_MAXIMUM_MEMBER, "이미 해당 국가의 최대 인원수에 도달했습니다.")
             }
 
-            if (!hasNationFuture.join()) {
+            if (hasNationFuture.join()) {
                 fail(ResultCode.ALREADY_HAS_NATION, "해당 유저는 이미 국가를 가지고 있습니다.")
             }
         }

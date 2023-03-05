@@ -33,6 +33,29 @@ territory:
   nearestDistanceOutpostToClaim: 30.0
   castleLength: 100
   outpostLength: 5
+  schematic:
+    castle: 'castle.schem'
+    outpost: 'outpost.schem'
+  schematicOffset:
+    castle:
+      x: 25
+      y: 0
+      z: 0
+    outpost:
+      x: 0
+      y: 0
+      z: 0
+  deleteRange:
+    castle:
+      weightX: 25
+      lengthZ: 25
+      height: 128
+      depth: 0
+    outpost:
+      weightX: 2
+      lengthZ: 2
+      height: 5
+      depth: 0
 grade:
   '1': '길드'
   '2': '국가'

@@ -20,4 +20,8 @@ data class ServerLoc(
         return ServerLoc(server, world, x, y, newZ)
     }
 
+    fun add(x: Int, y: Int, z: Int): ServerLoc {
+        return ServerLoc(server, world, this.x + x, this.y + y, this.z + z)
+    }
+
 }

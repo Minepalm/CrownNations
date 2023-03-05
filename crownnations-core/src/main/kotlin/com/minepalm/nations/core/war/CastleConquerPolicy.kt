@@ -1,13 +1,17 @@
 package com.minepalm.nations.core.war
 
+import com.minepalm.nations.territory.ModifyPolicy
+import com.minepalm.nations.territory.NationAction
+import com.minepalm.nations.territory.NationMonument
+import com.minepalm.nations.utils.ServerLoc
 import java.util.*
 
-class CastleConquerPolicy : com.minepalm.nations.territory.ModifyPolicy {
+class CastleConquerPolicy : ModifyPolicy {
     override fun test(
-        action: com.minepalm.nations.territory.NationAction,
+        action: NationAction,
         actor: UUID,
-        loc: com.minepalm.nations.utils.ServerLoc,
-        monument: com.minepalm.nations.territory.NationMonument
+        loc: ServerLoc,
+        monument: NationMonument
     ): Boolean {
         TODO("Not yet implemented")
     }

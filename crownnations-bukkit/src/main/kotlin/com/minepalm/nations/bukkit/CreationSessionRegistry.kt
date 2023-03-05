@@ -1,6 +1,7 @@
 package com.minepalm.nations.bukkit
 
 import com.minepalm.nations.*
+import com.minepalm.nations.utils.ServerLoc
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -23,10 +24,10 @@ class CreationSessionRegistry(
             }
     }
 
-    fun operate(uuid: UUID, loc: com.minepalm.nations.utils.ServerLoc): NationOperation<Nation>?{
-        return if(map.containsKey(uuid)) {
+    fun operate(uuid: UUID, loc: ServerLoc): NationOperation<Nation>? {
+        return if (map.containsKey(uuid)) {
             service.operateFoundation(member(uuid), map[uuid]!!, loc).also { map.remove(uuid) }
-        }else
+        } else
             null
     }
 

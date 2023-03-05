@@ -1,14 +1,16 @@
 package com.minepalm.nations.bukkit
 
 import com.minepalm.library.database.impl.internal.MySQLDB
-import com.minepalm.palmchat.api.*
+import com.minepalm.palmchat.api.ChatService
+import com.minepalm.palmchat.api.ChatText
+import com.minepalm.palmchat.api.ChatType
+import com.minepalm.palmchat.api.TextType
 import com.minepalm.palmchat.mysql.MySQLChannelDatabase
 import com.minepalm.palmchat.mysql.MySQLChannelFactory
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 
 class NetworkBroadcaster(
     private val chatModule: ChatService,
@@ -24,8 +26,7 @@ class NetworkBroadcaster(
             .builder()
             .tags(
                 TagResolver.builder()
-                    .resolver(StandardTags.color())
-                    .resolver(StandardTags.decorations())
+                    .resolver(StandardTags.defaults())
                     .build()
             ).build()
 
@@ -44,6 +45,6 @@ class NetworkBroadcaster(
     fun broadcast(nationId: Int, msg: Component){
         chatModule.channelRegistry.channel("NATION:$nationId")
             .session().system()
-            .send(ChatText(TextType.JSON, kyori.serialize(msg)))
+            .send(ChatText(TextType.KYORI, kyori.serialize(msg)))
     }
 }

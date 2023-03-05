@@ -2,13 +2,20 @@ package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.config.TerritoryConfiguration
+import com.minepalm.nations.event.TerritoryPreClaimEvent
+import com.minepalm.nations.territory.MonumentSchema
+import com.minepalm.nations.territory.NationCastle
+import com.minepalm.nations.territory.NationTerritoryService
+import com.minepalm.nations.territory.ProtectionRange
+import com.minepalm.nations.utils.ServerLoc
 
 class OperationClaimCastleAsNationCreate(
-    private val service: com.minepalm.nations.territory.NationTerritoryService,
-    private val config: com.minepalm.nations.config.TerritoryConfiguration,
-    private val location: com.minepalm.nations.utils.ServerLoc,
+    private val service: NationTerritoryService,
+    private val config: TerritoryConfiguration,
+    private val location: ServerLoc,
     private val commander: NationMember
-) : AbstractNationOperation<com.minepalm.nations.territory.NationCastle>(){
+) : AbstractNationOperation<NationCastle>() {
 
     init {
         set("nationId", -1)
@@ -37,24 +44,30 @@ class OperationClaimCastleAsNationCreate(
     }
 
     override fun process0() {
-        if(this["nationId", Int::class.java] == -1)
+        if (this["nationId", Int::class.java] == -1)
             fail(ResultCode.NATION_NOT_EXISTS, "올바르지 않은 국가 코드 입니다.")
 
-        val range = com.minepalm.nations.territory.ProtectionRange(
-            location.setX(location.x - config.castleLength / 2).setZ(location.z - config.castleLength / 2),
+        val range = ProtectionRange(
+            location.setX(location.x - config.castleLength / 2)
+                .setZ(location.z - config.castleLength / 2)
+                .setY(0),
             location.setX(location.x + config.castleLength / 2).setZ(location.z + config.castleLength / 2)
+                .setY(config.maximumHeight)
         )
-        val schema = com.minepalm.nations.territory.MonumentSchema(-1, nationId, "CASTLE", location, range)
+        val schema = MonumentSchema(-1, nationId, "CASTLE", location, range)
 
-        val event = com.minepalm.nations.event.TerritoryPreClaimEvent(nationId, "CASTLE", location)
+        val event = TerritoryPreClaimEvent(nationId, "CASTLE", location)
         service.root.localEventBus.invoke(event)
 
-        if(event.cancelled){
+        if (event.cancelled) {
             fail(ResultCode.EVENT_CANCELLED, "")
         }
 
         service.root.network.send(event)
-        success(ResultCode.SUCCESSFUL, service.create(schema).join() as com.minepalm.nations.territory.NationCastle)
+        success(service.create(schema).join() as NationCastle)
     }
 
+    override fun rollback() {
+        service.root.forceDelete(nationId).join()
+    }
 }

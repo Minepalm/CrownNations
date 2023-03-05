@@ -50,7 +50,12 @@ class PalmNationCache(
     }
 
     override fun update(uniqueId: UUID): CompletableFuture<Unit> {
-        return database.getRank(uniqueId, nationId).thenApply{ if(it != NationRank.NONE) cache[uniqueId] = it }
+        return database.getRank(uniqueId, nationId).thenApply{
+            if(it != NationRank.NONE)
+                cache[uniqueId] = it
+            else
+                cache.remove(uniqueId)
+        }
     }
 
     override fun invalidate() {

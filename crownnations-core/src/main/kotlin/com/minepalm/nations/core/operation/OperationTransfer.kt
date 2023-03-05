@@ -1,6 +1,7 @@
 package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
+import com.minepalm.nations.event.NationTransferEvent
 
 class OperationTransfer(
     val nation: Nation,
@@ -32,7 +33,7 @@ class OperationTransfer(
     override fun process0() {
         setResult(false)
 
-        val event = com.minepalm.nations.event.NationTransferEvent(nation.id, commander.uniqueId, transferTo.uniqueId)
+        val event = NationTransferEvent(nation.id, commander.uniqueId, transferTo.uniqueId)
         service.localEventBus.invoke(event)
 
         if (event.cancelled) {
@@ -53,7 +54,7 @@ class OperationTransfer(
         }
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
 
     }
 

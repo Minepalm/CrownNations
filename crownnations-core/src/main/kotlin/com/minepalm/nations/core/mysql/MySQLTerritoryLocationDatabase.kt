@@ -1,6 +1,9 @@
 package com.minepalm.nations.core.mysql
 
 import com.minepalm.library.database.impl.internal.MySQLDB
+import com.minepalm.nations.territory.MonumentSchema
+import com.minepalm.nations.territory.ProtectionRange
+import com.minepalm.nations.utils.ServerLoc
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.util.concurrent.CompletableFuture
@@ -30,15 +33,14 @@ class MySQLTerritoryLocationDatabase(
                         "`center_z` INT, " + //14
                         "PRIMARY KEY(`monument_id`))" +
                         "charset=utf8mb4"
-            )
-                .execute()
+            ).execute()
 
             //인덱스는 `server`, `world` 쌍으로 하나, nation_id 로 하나 걸면 좋을듯.
         }
     }
 
-    fun createNewMonument(schema: com.minepalm.nations.territory.MonumentSchema): CompletableFuture<com.minepalm.nations.territory.MonumentSchema> {
-        return database.executeAsync<com.minepalm.nations.territory.MonumentSchema> { connection ->
+    fun createNewMonument(schema: MonumentSchema): CompletableFuture<MonumentSchema> {
+        return database.executeAsync { connection ->
             connection.prepareStatement(
                 "INSERT INTO $table " +
                         "(`server`, `world`, `nation_id`, `type`, " +
@@ -68,7 +70,7 @@ class MySQLTerritoryLocationDatabase(
             val id = connection.prepareStatement("SELECT LAST_INSERT_ID()").executeQuery().let {
                 if (it.next()) it.getInt(1) else -1
             }
-            com.minepalm.nations.territory.MonumentSchema(
+            MonumentSchema(
                 id,
                 schema.nationId,
                 schema.type,
@@ -78,8 +80,8 @@ class MySQLTerritoryLocationDatabase(
         }
     }
 
-    fun getMonument(id: Int): CompletableFuture<com.minepalm.nations.territory.MonumentSchema?> {
-        return database.executeAsync<com.minepalm.nations.territory.MonumentSchema?> { connection ->
+    fun getMonument(id: Int): CompletableFuture<MonumentSchema?> {
+        return database.executeAsync { connection ->
             connection.prepareStatement(
                 "SELECT `monument_id`, `server`, `world`, `nation_id`, `type`, " +
                         "`min_x`, `min_y`, `min_z`, " +
@@ -96,14 +98,14 @@ class MySQLTerritoryLocationDatabase(
                         val nationId = it.readNationId()
                         val type = it.readType()
                         val center = it.readCenter()
-                        val max = it.readMaximum()
-                        val min = it.readMinimum()
-                        com.minepalm.nations.territory.MonumentSchema(
+                        val max = it.readMinimum()
+                        val min = it.readMaximum()
+                        MonumentSchema(
                             id,
                             nationId,
                             type,
                             center,
-                            com.minepalm.nations.territory.ProtectionRange(max, min)
+                            ProtectionRange(min, max)
                         )
                     } else
                         null
@@ -111,8 +113,8 @@ class MySQLTerritoryLocationDatabase(
         }
     }
 
-    fun getServerMonuments(server: String): CompletableFuture<List<com.minepalm.nations.territory.MonumentSchema>> {
-        return database.executeAsync<List<com.minepalm.nations.territory.MonumentSchema>> { connection ->
+    fun getServerMonuments(server: String): CompletableFuture<List<MonumentSchema>> {
+        return database.executeAsync<List<MonumentSchema>> { connection ->
             connection.prepareStatement(
                 "SELECT `monument_id`, `server`, `world`, `nation_id`, `type`, " +
                         "`min_x`, `min_y`, `min_z`, " +
@@ -124,23 +126,15 @@ class MySQLTerritoryLocationDatabase(
                 }
                 .executeQuery()
                 .let {
-                    mutableListOf<com.minepalm.nations.territory.MonumentSchema>().apply {
+                    mutableListOf<MonumentSchema>().apply {
                         while (it.next()) {
                             val id = it.getInt(1)
                             val nationId = it.readNationId()
                             val type = it.readType()
                             val center = it.readCenter()
-                            val max = it.readMaximum()
                             val min = it.readMinimum()
-                            add(
-                                com.minepalm.nations.territory.MonumentSchema(
-                                    id,
-                                    nationId,
-                                    type,
-                                    center,
-                                    com.minepalm.nations.territory.ProtectionRange(max, min)
-                                )
-                            )
+                            val max = it.readMaximum()
+                            add(MonumentSchema(id, nationId, type, center, ProtectionRange(min, max)))
                         }
                     }
                 }
@@ -159,8 +153,8 @@ class MySQLTerritoryLocationDatabase(
     fun getServerWorldMonuments(
         server: String,
         world: String
-    ): CompletableFuture<List<com.minepalm.nations.territory.MonumentSchema>> {
-        return database.executeAsync<List<com.minepalm.nations.territory.MonumentSchema>> { connection ->
+    ): CompletableFuture<List<MonumentSchema>> {
+        return database.executeAsync<List<MonumentSchema>> { connection ->
             connection.prepareStatement(
                 "SELECT `monument_id`, `server`, `world`, `nation_id`, `type`, " +
                         "`min_x`, `min_y`, `min_z`, " +
@@ -173,21 +167,21 @@ class MySQLTerritoryLocationDatabase(
                 }
                 .executeQuery()
                 .let {
-                    mutableListOf<com.minepalm.nations.territory.MonumentSchema>().apply {
+                    mutableListOf<MonumentSchema>().apply {
                         while (it.next()) {
                             val id = it.getInt(1)
                             val nationId = it.readNationId()
                             val type = it.readType()
                             val center = it.readCenter()
-                            val max = it.readMaximum()
                             val min = it.readMinimum()
+                            val max = it.readMaximum()
                             add(
-                                com.minepalm.nations.territory.MonumentSchema(
+                                MonumentSchema(
                                     id,
                                     nationId,
                                     type,
                                     center,
-                                    com.minepalm.nations.territory.ProtectionRange(max, min)
+                                    ProtectionRange(min, max)
                                 )
                             )
                         }
@@ -196,8 +190,8 @@ class MySQLTerritoryLocationDatabase(
         }
     }
 
-    fun getNationMonuments(nationId: Int): CompletableFuture<List<com.minepalm.nations.territory.MonumentSchema>> {
-        return database.executeAsync<List<com.minepalm.nations.territory.MonumentSchema>> { connection ->
+    fun getNationMonuments(nationId: Int): CompletableFuture<List<MonumentSchema>> {
+        return database.executeAsync { connection ->
             connection.prepareStatement(
                 "SELECT `monument_id`, `server`, `world`, `nation_id`, `type`, " +
                         "`min_x`, `min_y`, `min_z`, " +
@@ -209,29 +203,21 @@ class MySQLTerritoryLocationDatabase(
                 }
                 .executeQuery()
                 .let {
-                    mutableListOf<com.minepalm.nations.territory.MonumentSchema>().apply {
+                    mutableListOf<MonumentSchema>().apply {
                         while (it.next()) {
                             val id = it.getInt(1)
                             val type = it.readType()
                             val center = it.readCenter()
-                            val max = it.readMaximum()
                             val min = it.readMinimum()
-                            add(
-                                com.minepalm.nations.territory.MonumentSchema(
-                                    id,
-                                    nationId,
-                                    type,
-                                    center,
-                                    com.minepalm.nations.territory.ProtectionRange(max, min)
-                                )
-                            )
+                            val max = it.readMaximum()
+                            add(MonumentSchema(id, nationId, type, center, ProtectionRange(max, min)))
                         }
                     }
                 }
         }
     }
 
-    fun update(schema: com.minepalm.nations.territory.MonumentSchema): CompletableFuture<Unit> {
+    fun update(schema: MonumentSchema): CompletableFuture<Unit> {
         return database.executeAsync<Unit> { connection ->
             connection.prepareStatement(
                 "INSERT INTO $table " +
@@ -276,7 +262,7 @@ class MySQLTerritoryLocationDatabase(
     }
 
     fun deleteMonument(id: Int): CompletableFuture<Unit> {
-        return database.executeAsync<Unit> { connection ->
+        return database.executeAsync { connection ->
             connection.prepareStatement("DELETE FROM $table WHERE `monument_id`=?")
                 .apply { setInt(1, id) }
                 .execute()
@@ -284,15 +270,15 @@ class MySQLTerritoryLocationDatabase(
     }
 
     fun deleteNationMonuments(nationId: Int): CompletableFuture<Unit> {
-        return database.executeAsync<Unit> { connection ->
+        return database.executeAsync { connection ->
             connection.prepareStatement("DELETE FROM $table WHERE `nation_id`=?")
                 .apply { setInt(1, nationId) }
                 .execute()
         }
     }
 
-    fun updateCenter(monumentId: Int, loc: com.minepalm.nations.utils.ServerLoc): CompletableFuture<Boolean> {
-        return database.executeAsync<Boolean> { connection ->
+    fun updateCenter(monumentId: Int, loc: ServerLoc): CompletableFuture<Boolean> {
+        return database.executeAsync { connection ->
             connection.prepareStatement("SELECT `monument_id` FROM $table WHERE `monument_id`=?")
                 .apply { setInt(1, monumentId) }
                 .executeQuery()
@@ -311,7 +297,7 @@ class MySQLTerritoryLocationDatabase(
         }
     }
 
-    fun updateMinimum(monumentId: Int, loc: com.minepalm.nations.utils.ServerLoc): CompletableFuture<Boolean> {
+    fun updateMinimum(monumentId: Int, loc: ServerLoc): CompletableFuture<Boolean> {
         return database.executeAsync<Boolean> { connection ->
             connection.prepareStatement("SELECT `monument_id` FROM $table WHERE `monument_id`=?")
                 .apply { setInt(1, monumentId) }
@@ -331,8 +317,8 @@ class MySQLTerritoryLocationDatabase(
         }
     }
 
-    fun updateMaximum(monumentId: Int, loc: com.minepalm.nations.utils.ServerLoc): CompletableFuture<Boolean> {
-        return database.executeAsync<Boolean> { connection ->
+    fun updateMaximum(monumentId: Int, loc: ServerLoc): CompletableFuture<Boolean> {
+        return database.executeAsync { connection ->
             connection.prepareStatement("SELECT `monument_id` FROM $table WHERE `monument_id`=?")
                 .apply { setInt(1, monumentId) }
                 .executeQuery()
@@ -351,19 +337,19 @@ class MySQLTerritoryLocationDatabase(
         }
     }
 
-    private fun PreparedStatement.writeMinimum(loc: com.minepalm.nations.utils.ServerLoc) {
+    private fun PreparedStatement.writeMinimum(loc: ServerLoc) {
         setInt(6, loc.x)
         setInt(7, loc.y)
         setInt(8, loc.z)
     }
 
-    private fun PreparedStatement.writeMaximum(loc: com.minepalm.nations.utils.ServerLoc) {
+    private fun PreparedStatement.writeMaximum(loc: ServerLoc) {
         setInt(9, loc.x)
         setInt(10, loc.y)
         setInt(11, loc.z)
     }
 
-    private fun PreparedStatement.writeCenter(loc: com.minepalm.nations.utils.ServerLoc) {
+    private fun PreparedStatement.writeCenter(loc: ServerLoc) {
         setInt(12, loc.x)
         setInt(13, loc.y)
         setInt(14, loc.z)
@@ -385,31 +371,31 @@ class MySQLTerritoryLocationDatabase(
         setString(5, type)
     }
 
-    private fun ResultSet.readMaximum(): com.minepalm.nations.utils.ServerLoc {
+    private fun ResultSet.readMaximum(): ServerLoc {
         val server = readServer()
         val world = readWorld()
         val x = getInt(9)
         val y = getInt(10)
         val z = getInt(11)
-        return com.minepalm.nations.utils.ServerLoc(server, world, x, y, z)
+        return ServerLoc(server, world, x, y, z)
     }
 
-    private fun ResultSet.readMinimum(): com.minepalm.nations.utils.ServerLoc {
+    private fun ResultSet.readMinimum(): ServerLoc {
         val server = readServer()
         val world = readWorld()
         val x = getInt(6)
         val y = getInt(7)
         val z = getInt(8)
-        return com.minepalm.nations.utils.ServerLoc(server, world, x, y, z)
+        return ServerLoc(server, world, x, y, z)
     }
 
-    private fun ResultSet.readCenter(): com.minepalm.nations.utils.ServerLoc {
+    private fun ResultSet.readCenter(): ServerLoc {
         val server = readServer()
         val world = readWorld()
         val x = getInt(12)
         val y = getInt(13)
         val z = getInt(14)
-        return com.minepalm.nations.utils.ServerLoc(server, world, x, y, z)
+        return ServerLoc(server, world, x, y, z)
     }
 
     private fun ResultSet.readServer(): String {

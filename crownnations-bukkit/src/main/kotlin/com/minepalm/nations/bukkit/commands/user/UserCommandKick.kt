@@ -53,10 +53,6 @@ class UserCommandKick(
             return OperationResult(ResultCode.PLAYER_NOT_EXISTS, false)
         }
 
-        if(players.isOnline(username)){
-            return OperationResult(ResultCode.PLAYER_NOT_ONLINE, false)
-        }
-
         val nation = nationFuture.join() ?: return OperationResult(ResultCode.NO_NATION, false)
 
         return nation.operateKickMember(service.memberRegistry[player.uniqueId], uuid).process()

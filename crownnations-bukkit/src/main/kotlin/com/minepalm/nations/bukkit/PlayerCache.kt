@@ -30,7 +30,7 @@ class PlayerCache(
 
         })
 
-    private fun register(uuid: UUID, username: String){
+    fun register(uuid: UUID, username: String) {
         uuidsLocal[uuid] = username
         namesLocal[username] = uuid
     }
@@ -44,6 +44,7 @@ class PlayerCache(
     fun isOnline(username : String) : Boolean{
         return uuid(username)?.let { playersModule[it].isOnline.join() } ?: false
     }
+
 
     fun exists(username : String) : Boolean{
         return uuid(username) != null

@@ -4,6 +4,8 @@ import com.minepalm.nations.Nation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationService
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.event.NationCreateEvent
+import com.minepalm.nations.territory.NationCastle
 
 class OperationNationFoundation(
     private val service: NationService,
@@ -39,16 +41,16 @@ class OperationNationFoundation(
             fail(ResultCode.OWNER_MISMATCH, "생성한 국가의 소유주가 일치하지 않습니다. 관리자에게 문의해주세요.")
         }
 
-        val event = com.minepalm.nations.event.NationCreateEvent(nation.id, commander.uniqueId)
+        val event = NationCreateEvent(nation.id, commander.uniqueId)
         service.localEventBus.invoke(event)
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, nation)
+        success(nation)
 
     }
 
     private fun processClaimOperationInContext(){
-        val operation = operationClaim as AbstractNationOperation<com.minepalm.nations.territory.NationCastle>
+        val operation = operationClaim as AbstractNationOperation<NationCastle>
         try {
             operation.checkOrThrow()
             operation.process0()

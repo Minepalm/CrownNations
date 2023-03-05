@@ -82,6 +82,6 @@ class OperationWarDeclare(
 
         session.operateStart().process()
 
-        success(ResultCode.SUCCESSFUL, session)
+        success(session)
     }
 }

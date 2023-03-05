@@ -1,5 +1,8 @@
 package com.minepalm.nations.core.territory
 
+import com.minepalm.nations.territory.NationMonument
+import com.minepalm.nations.territory.NationOutpost
+
 class PalmNationOutpost(
-    controller: com.minepalm.nations.territory.NationMonument
-) : MonumentWrapper(controller), com.minepalm.nations.territory.NationOutpost
+    controller: NationMonument
+) : MonumentWrapper(controller), NationOutpost

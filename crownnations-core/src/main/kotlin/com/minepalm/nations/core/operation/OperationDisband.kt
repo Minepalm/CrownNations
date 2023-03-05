@@ -2,6 +2,7 @@ package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
 import com.minepalm.nations.core.network.MemberUpdate
+import com.minepalm.nations.event.NationDisbandEvent
 
 class OperationDisband(
     val nation: Nation,
@@ -28,7 +29,7 @@ class OperationDisband(
     override fun process0() {
         setResult(false)
 
-        val event = com.minepalm.nations.event.NationDisbandEvent(nation.id, nation.name, commander.uniqueId)
+        val event = NationDisbandEvent(nation.id, nation.name, commander.uniqueId)
         service.localEventBus.invoke(event)
 
         if (event.cancelled) {
@@ -40,7 +41,7 @@ class OperationDisband(
         members?.forEach { service.network.broadcast(MemberUpdate(it.uniqueId)) }
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
     }
 
 }

@@ -5,7 +5,7 @@ import com.minepalm.library.network.api.HelloSender
 import com.minepalm.nations.core.mysql.MySQLNationServerDatabase
 import java.util.concurrent.CompletableFuture
 
-class RendogNationServer(
+class CrownNationServer(
     override val name: String,
     private val sender: HelloSender,
     private val client: HelloClient,

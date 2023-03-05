@@ -6,8 +6,6 @@ object ChatTokens {
 
     val global = ChatType("NATION_GLOBAL", 19)
     val nation = ChatType("NATION", 20)
-    //object AllianceChat: ChatType("ALLY", 22)
-    //object PartyChat: ChatType("PARTY", 30)
 
 
     fun find(name: String): ChatType{

@@ -1,5 +1,6 @@
 package com.minepalm.nations.territory
 
+import com.minepalm.nations.utils.ServerLoc
 import java.util.concurrent.CompletableFuture
 
 interface WorldModifier {
@@ -13,10 +14,9 @@ interface WorldModifier {
 
     fun create(schema: MonumentSchema): CompletableFuture<Boolean>
 
-    fun delete(
-        min: com.minepalm.nations.utils.ServerLoc,
-        max: com.minepalm.nations.utils.ServerLoc
-    ): CompletableFuture<Unit>
+    fun delete(min: ServerLoc, max: ServerLoc): CompletableFuture<Unit>
+
+    fun delete(monumentType: String, center: ServerLoc): CompletableFuture<Unit>
 
     fun shutdown()
 }

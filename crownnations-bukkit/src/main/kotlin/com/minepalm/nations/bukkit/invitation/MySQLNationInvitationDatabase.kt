@@ -24,15 +24,15 @@ class MySQLNationInvitationDatabase(
     }
 
     fun getInvitedNations(uuid: UUID): CompletableFuture<Map<String, UUID>>{
-        return database.executeAsync<Map<String, UUID>> { connection ->
-            connection.prepareStatement("SELECT `nation_name`, `invited` FROM $table WHERE `receiver`=? AND `expired_time`=?")
+        return database.executeAsync { connection ->
+            connection.prepareStatement("SELECT `nation_name`, `invited` FROM $table WHERE `receiver`=? AND `expired_time`>=?")
                 .apply {
                     setString(1, uuid.toString())
                     setLong(2, System.currentTimeMillis())
                 }.executeQuery()
                 .let {
                     mutableMapOf<String, UUID>().apply {
-                        while (it.next()){
+                        while (it.next()) {
                             put(it.getString(1), UUID.fromString(it.getString(2)))
                         }
                     }

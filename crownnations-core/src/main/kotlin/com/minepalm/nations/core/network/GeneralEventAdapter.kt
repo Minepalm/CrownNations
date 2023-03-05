@@ -4,6 +4,7 @@ import com.minepalm.library.network.api.HelloAdapter
 import com.minepalm.nations.Nation
 import com.minepalm.nations.NationRank
 import com.minepalm.nations.NationService
+import com.minepalm.nations.event.NationRemoveMemberEvent
 import io.netty.buffer.ByteBuf
 
 sealed class GeneralEventAdapter {
@@ -44,16 +45,16 @@ sealed class GeneralEventAdapter {
 
     class RemoveMember(
         private val service: NationService
-    ) : HelloAdapter<com.minepalm.nations.event.NationRemoveMemberEvent>(com.minepalm.nations.event.NationRemoveMemberEvent::class.java.simpleName) {
+    ) : HelloAdapter<NationRemoveMemberEvent>(NationRemoveMemberEvent::class.java.simpleName) {
 
-        override fun decode(buf: ByteBuf): com.minepalm.nations.event.NationRemoveMemberEvent {
+        override fun decode(buf: ByteBuf): NationRemoveMemberEvent {
             val nation = buf.readNation(service)
             val commander = buf.readUUID()
             val remover = buf.readUUID()
             val reason = buf.readString()
             val cancelled = buf.readBoolean()
             val time = buf.readLong()
-            return com.minepalm.nations.event.NationRemoveMemberEvent(
+            return NationRemoveMemberEvent(
                 nation,
                 commander,
                 remover,
@@ -63,7 +64,7 @@ sealed class GeneralEventAdapter {
             )
         }
 
-        override fun encode(buf: ByteBuf, event: com.minepalm.nations.event.NationRemoveMemberEvent) {
+        override fun encode(buf: ByteBuf, event: NationRemoveMemberEvent) {
             buf.writeInt(event.nationId)
             buf.writeUUID(event.commander)
             buf.writeUUID(event.removerId)

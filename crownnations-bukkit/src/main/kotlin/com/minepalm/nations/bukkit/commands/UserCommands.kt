@@ -46,83 +46,88 @@ class UserCommands(
     val invitationService: InvitationService,
     val inviteDatabase: MySQLNationInvitationDatabase,
     val executor: BukkitExecutor
-) : BaseCommand(){
+) : BaseCommand() {
 
     @Default
     @Subcommand("도움말")
-    fun help(player : Player, @Default("1") page : Int){
+    fun help(player: Player, @Default("1") page: Int) {
         UserCommandHelp(reg["HELP"]).whenCommand(player, page)
     }
 
     @Subcommand("생성")
-    fun create(player : Player, name : String){
+    fun create(player: Player, name: String) {
         UserCommandCreate(service, sessions, reg["CREATE"], executor).whenCommand(player, name)
     }
 
     @Subcommand("해산|해체")
-    fun disband(player: Player){
+    fun disband(player: Player) {
         UserCommandDisband(service, reg["DISBAND"], executor).whenCommand(player)
     }
 
     @Subcommand("초대")
-    fun invite(player : Player, username : String){
+    fun invite(player: Player, username: String) {
         UserCommandInvite.Request(service, players, invitationService, reg["ADD_MEMBER"], inviteDatabase, executor)
             .whenCommand(player, username)
     }
 
     @Subcommand("추방|강퇴")
-    fun kick(player : Player, username : String){
+    fun kick(player: Player, username: String) {
         UserCommandKick(service, players, reg["REMOVE_MEMBER"], executor).whenCommand(player, username)
     }
 
     @Subcommand("양도|위임")
-    fun transfer(player : Player, username : String){
+    fun transfer(player: Player, username: String) {
         UserCommandTransfer(service, players, reg["TRANSFER"], executor).whenCommand(player, username)
     }
 
     @Subcommand("직위|직급")
-    fun setRank(player : Player, username : String, rankIn: String){
+    fun setRank(player: Player, username: String, rankIn: String) {
         UserCommandSetRank(service, players, reg["SET_RANK"], executor).whenCommand(player, username, rankIn)
     }
 
     @Subcommand("입금")
-    fun deposit(player : Player, value : Double){
+    fun deposit(player: Player, value: Double) {
         UserCommandDeposit(service, reg["DEPOSIT"], executor).whenCommand(player, value)
     }
 
-    fun withdraw(player : Player, value : Double){
+    fun withdraw(player: Player, value: Double) {
         UserCommandWithdraw(service, reg["WITHDRAW"], executor).whenCommand(player, value)
     }
 
     @Subcommand("정보")
-    fun info(player : Player, nationName : String){
-        UserCommandInfo(service, executor, reg["INFO"], players).whenCommand(player, nationName)
+    fun info(player: Player, @Default("!self!") nationName: String) {
+        if (nationName == "!self!")
+            UserCommandInfo(service, executor, reg["INFO"], players).whenCommand(player)
+        else
+            UserCommandInfo(service, executor, reg["INFO"], players).whenCommand(player, nationName)
     }
 
     @Subcommand("수락")
-    fun inviteReject(player : Player, nationName : String){
-        UserCommandInvite.Reject(invitationService, inviteDatabase, reg["ADD_MEMBER"], executor).whenCommand(player, nationName)
+    fun inviteAccept(player: Player, nationName: String) {
+        UserCommandInvite.Accept(invitationService, inviteDatabase, reg["ADD_MEMBER"], executor)
+            .whenCommand(player, nationName)
     }
 
     @Subcommand("거절")
-    fun inviteAccept(player : Player, nationName : String){
-        UserCommandInvite.Accept(invitationService, inviteDatabase, reg["ADD_MEMBER"], executor).whenCommand(player, nationName)
+    fun inviteReject(player: Player, nationName: String) {
+        UserCommandInvite.Reject(invitationService, inviteDatabase, reg["ADD_MEMBER"], executor)
+            .whenCommand(player, nationName)
     }
 
     @Subcommand("탈퇴|떠나기")
-    fun leave(player : Player){
+    fun leave(player: Player) {
         UserCommandLeave(service, reg["REMOVE_MEMBER"], executor).whenCommand(player)
     }
 
-    fun toggleChat(player : Player){
+    fun toggleChat(player: Player) {
 
     }
 
-    fun tax(player : Player){
+    fun tax(player: Player) {
 
     }
 
-    fun teleport(player : Player){
+    fun teleport(player: Player) {
 
     }
 }

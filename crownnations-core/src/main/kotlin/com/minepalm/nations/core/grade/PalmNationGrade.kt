@@ -4,6 +4,7 @@ import com.minepalm.nations.Nation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationOperation
 import com.minepalm.nations.NationService
+import com.minepalm.nations.event.NationGradeUpdateEvent
 import java.util.concurrent.CompletableFuture
 
 class PalmNationGrade(
@@ -47,7 +48,7 @@ class PalmNationGrade(
         }
 
         override fun setLevel(level: Int): CompletableFuture<Unit> {
-            val event = com.minepalm.nations.event.NationGradeUpdateEvent(nationId, level)
+            val event = NationGradeUpdateEvent(nationId, level)
             service.localEventBus.invoke(event)
             service.network.send(event)
             return database.setGrade(nationId, level)

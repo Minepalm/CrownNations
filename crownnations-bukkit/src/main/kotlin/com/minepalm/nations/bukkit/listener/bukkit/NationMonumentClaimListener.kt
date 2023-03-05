@@ -9,6 +9,8 @@ import com.minepalm.nations.bukkit.CreationSessionRegistry
 import com.minepalm.nations.bukkit.message.PrinterRegistry
 import com.minepalm.nations.bukkit.message.ResultMessage
 import com.minepalm.nations.bukkit.message.ResultPrinter
+import com.minepalm.nations.config.TerritoryConfiguration
+import com.minepalm.nations.utils.ServerLoc
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -22,7 +24,7 @@ class NationMonumentClaimListener(
     private val printers: PrinterRegistry,
     private val service: NationService,
     private val registry: CreationSessionRegistry,
-    private val config: com.minepalm.nations.config.TerritoryConfiguration,
+    private val config: TerritoryConfiguration,
     private val executor: BukkitExecutor
 ) : Listener {
 
@@ -58,44 +60,43 @@ class NationMonumentClaimListener(
     }
 
 
-    private fun onClaimOutpost(player: Player, loc: com.minepalm.nations.utils.ServerLoc){
+    private fun onClaimOutpost(player: Player, loc: ServerLoc) {
         val member = player.member()
-        member.cache.getNation()?.also {nation ->
+        member.cache.getNation()?.also { nation ->
             val item = player.takeItem(Material.NETHERRACK)?.apply { amount = 1 }
             nation.territory.local.operateNewOutpost(member, loc).process().also {
                 printResult(outpostPrinter, it, player, nation.name)
-                if(it.code != ResultCode.SUCCESSFUL){
+                if (it.code != ResultCode.SUCCESSFUL) {
                     item?.let { i -> player.inventory.addItem(i) }
                 }
             }
         } ?: player.sendMessage(outpostPrinter["NO_NATION"])
     }
 
-    private fun onClaimCastle(player: Player, loc: com.minepalm.nations.utils.ServerLoc){
+    private fun onClaimCastle(player: Player, loc: ServerLoc) {
         val member = player.member()
-        member.cache.getNation()?.also {nation ->
+        member.cache.getNation()?.also { nation ->
             val item = player.takeItem(Material.BEACON)?.apply { amount = 1 }
             nation.territory.local.operateNewCastle(member, loc).process().also {
                 printResult(castlePrinter, it, player, nation.name)
-                if(it.code != ResultCode.SUCCESSFUL){
+                if (it.code != ResultCode.SUCCESSFUL) {
                     item?.let { i -> player.inventory.addItem(i) }
                 }
             }
         } ?: player.sendMessage(castlePrinter["NO_NATION"])
     }
 
-    private fun onNationCreation(player: Player, loc: com.minepalm.nations.utils.ServerLoc) {
+    private fun onNationCreation(player: Player, loc: ServerLoc) {
         val uuid = player.uniqueId
         val name = registry[uuid]!!
         val item = player.takeItem(Material.BEACON)?.apply { amount = 1 }
         registry.operate(uuid, loc)?.process()
             ?.also { result ->
                 printResult(castlePrinter, result, player, name)
-                if(result.code != ResultCode.SUCCESSFUL){
+                if (result.code != ResultCode.SUCCESSFUL) {
                     item?.let { i -> player.inventory.addItem(i) }
                 }
-                if(result.exception != null)
-                    throw result.exception!!
+
             } ?: item?.let { i -> player.inventory.addItem(i) }
 
     }
@@ -132,8 +133,8 @@ class NationMonumentClaimListener(
     }
 
 
-    private fun Location.loc(): com.minepalm.nations.utils.ServerLoc {
-        return com.minepalm.nations.utils.ServerLoc(serverName, this.world.name, this.blockX, this.blockY, this.blockZ)
+    private fun Location.loc(): ServerLoc {
+        return ServerLoc(serverName, this.world.name, this.blockX, this.blockY, this.blockZ)
     }
 
 }

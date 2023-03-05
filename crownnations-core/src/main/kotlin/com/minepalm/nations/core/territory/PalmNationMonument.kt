@@ -5,6 +5,11 @@ import com.minepalm.nations.core.mysql.MySQLTerritorySchematicDatabase
 import com.minepalm.nations.core.territory.hellobungee.RequestMonumentCollapse
 import com.minepalm.nations.core.territory.hellobungee.RequestMonumentLoad
 import com.minepalm.nations.core.territory.hellobungee.RequestMonumentSave
+import com.minepalm.nations.territory.MonumentBlob
+import com.minepalm.nations.territory.MonumentSchema
+import com.minepalm.nations.territory.NationTerritoryService
+import com.minepalm.nations.territory.ProtectionRange
+import com.minepalm.nations.utils.ServerLoc
 import java.util.concurrent.CompletableFuture
 
 sealed class PalmNationMonument {
@@ -12,33 +17,27 @@ sealed class PalmNationMonument {
         id: Int,
         type: String,
         ownerId: Int,
-        center: com.minepalm.nations.utils.ServerLoc,
-        range: com.minepalm.nations.territory.ProtectionRange,
-        service: com.minepalm.nations.territory.NationTerritoryService,
+        center: ServerLoc,
+        range: ProtectionRange,
+        service: NationTerritoryService,
         private val database: MySQLTerritoryLocationDatabase,
         private val schematicDatabase: MySQLTerritorySchematicDatabase
-    ) : AbstractNationMonument(id, type, ownerId, center, range, service){
+    ) : AbstractNationMonument(id, type, ownerId, center, range, service) {
 
         override val isLocal: Boolean = true
 
-        constructor(schema: com.minepalm.nations.territory.MonumentSchema,
-                    service: com.minepalm.nations.territory.NationTerritoryService,
-                    database: MySQLTerritoryLocationDatabase,
-                    schematicDatabase: MySQLTerritorySchematicDatabase
+        constructor(
+            schema: MonumentSchema,
+            service: NationTerritoryService,
+            database: MySQLTerritoryLocationDatabase,
+            schematicDatabase: MySQLTerritorySchematicDatabase
+        ) : this(
+            schema.id, schema.type, schema.nationId, schema.center, schema.range,
+            service, database, schematicDatabase
         )
-                : this(schema.id, schema.type, schema.nationId, schema.center, schema.range,
-            service, database, schematicDatabase)
 
-        override fun toData(): CompletableFuture<com.minepalm.nations.territory.MonumentBlob> {
-            return service.modifier.serialize(
-                com.minepalm.nations.territory.MonumentSchema(
-                    id,
-                    nationId,
-                    type,
-                    center,
-                    range
-                )
-            )
+        override fun toData(): CompletableFuture<MonumentBlob> {
+            return service.modifier.serialize(MonumentSchema(id, nationId, type, center, range))
         }
 
         override fun save(): CompletableFuture<Unit> {
@@ -53,7 +52,7 @@ sealed class PalmNationMonument {
             return world.local.delete(id).thenApply {
                 it.also { success ->
                     if(success)
-                        service.modifier.delete(range.minimumLocation, range.maximumLocation)
+                        service.modifier.delete(type, center)
                 }
             }
         }
@@ -64,24 +63,27 @@ sealed class PalmNationMonument {
         id: Int,
         type: String,
         ownerId: Int,
-        center: com.minepalm.nations.utils.ServerLoc,
-        range: com.minepalm.nations.territory.ProtectionRange,
-        service: com.minepalm.nations.territory.NationTerritoryService,
+        center: ServerLoc,
+        range: ProtectionRange,
+        service: NationTerritoryService,
         private val database: MySQLTerritoryLocationDatabase,
         private val schematicDatabase: MySQLTerritorySchematicDatabase
-    ) : AbstractNationMonument(id, type, ownerId, center, range, service){
+    ) : AbstractNationMonument(id, type, ownerId, center, range, service) {
 
         override val isLocal: Boolean = false
 
-        constructor(schema: com.minepalm.nations.territory.MonumentSchema,
-                    service: com.minepalm.nations.territory.NationTerritoryService,
-                    database: MySQLTerritoryLocationDatabase,
-                    schematicDatabase: MySQLTerritorySchematicDatabase
+        constructor(
+            schema: MonumentSchema,
+            service: NationTerritoryService,
+            database: MySQLTerritoryLocationDatabase,
+            schematicDatabase: MySQLTerritorySchematicDatabase
         )
-                : this(schema.id, schema.type, schema.nationId, schema.center, schema.range,
-            service, database, schematicDatabase)
+                : this(
+            schema.id, schema.type, schema.nationId, schema.center, schema.range,
+            service, database, schematicDatabase
+        )
 
-        override fun toData(): CompletableFuture<com.minepalm.nations.territory.MonumentBlob> {
+        override fun toData(): CompletableFuture<MonumentBlob> {
             return world.server
                 .callback(RequestMonumentSave(id), Boolean::class.java)
                 .thenCompose { schematicDatabase.loadAsync(id) }

@@ -42,7 +42,7 @@ class OperationMetadataChange(
         }
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
 
     }
 

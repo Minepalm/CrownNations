@@ -3,6 +3,7 @@ package com.minepalm.nations.territory
 import com.minepalm.nations.Nation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationOperation
+import com.minepalm.nations.utils.ServerLoc
 import java.util.concurrent.CompletableFuture
 
 interface NationMonument {
@@ -10,14 +11,14 @@ interface NationMonument {
     val id: Int
     val type: String
     val world: NationWorld
-    var center: com.minepalm.nations.utils.ServerLoc
+    var center: ServerLoc
     val range: ProtectionRange
     val nationId: Int
     val owner: Nation
     val isLocal: Boolean
 
     fun test(
-        loc: com.minepalm.nations.utils.ServerLoc,
+        loc: ServerLoc,
         action: NationAction,
         member: NationMember
     ): NationOperation<Boolean>

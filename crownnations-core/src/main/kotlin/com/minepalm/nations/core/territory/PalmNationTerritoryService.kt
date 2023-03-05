@@ -2,24 +2,28 @@ package com.minepalm.nations.core.territory
 
 import com.minepalm.library.database.impl.internal.MySQLDB
 import com.minepalm.nations.NationService
+import com.minepalm.nations.config.TerritoryConfiguration
 import com.minepalm.nations.core.mysql.MySQLTerritoryLocationDatabase
 import com.minepalm.nations.core.mysql.MySQLTerritorySchematicDatabase
+import com.minepalm.nations.core.territory.listener.NationDisbandListener
+import com.minepalm.nations.event.NationDisbandEvent
+import com.minepalm.nations.territory.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 
 class PalmNationTerritoryService(
     override val root: NationService,
-    config: com.minepalm.nations.config.TerritoryConfiguration,
-    override val modifier: com.minepalm.nations.territory.WorldModifier,
+    config: TerritoryConfiguration,
+    override val modifier: WorldModifier,
     mysqlLocationDatabase: MySQLDB,
     mysqlSchematicDatabase: MySQLDB,
     executor: ExecutorService
-): com.minepalm.nations.territory.NationTerritoryService {
+) : NationTerritoryService {
 
-    override val universe: com.minepalm.nations.territory.NationWorldUniverse
-    override val territoryRegistry: com.minepalm.nations.territory.NationTerritoryRegistry
-    override val policyRegistry: com.minepalm.nations.territory.ModifyPolicyRegistry
-    override val operationFactory: com.minepalm.nations.territory.TerritoryOperationFactory
+    override val universe: NationWorldUniverse
+    override val territoryRegistry: NationTerritoryRegistry
+    override val policyRegistry: ModifyPolicyRegistry
+    override val operationFactory: TerritoryOperationFactory
 
     private val monumentFactory: MonumentFactory
     private val locationDatabase: MySQLTerritoryLocationDatabase
@@ -27,23 +31,43 @@ class PalmNationTerritoryService(
 
     init {
         locationDatabase =
-            MySQLTerritoryLocationDatabase(mysqlLocationDatabase, "rendognations_monuments")
+            MySQLTerritoryLocationDatabase(mysqlLocationDatabase, "crownnations_monuments")
         schematicDatabase =
-            MySQLTerritorySchematicDatabase(mysqlSchematicDatabase, "rendognations_monument_schematics")
+            MySQLTerritorySchematicDatabase(mysqlSchematicDatabase, "crownnations_monument_schematics")
         monumentFactory = MonumentFactory(this, locationDatabase, schematicDatabase)
         universe = PalmNationWorldUniverse(root.network, this, config.worlds, monumentFactory, locationDatabase)
         territoryRegistry = PalmTerritoryRegistry(this, locationDatabase, executor)
         policyRegistry = ModifyPolicyRegistryImpl()
         operationFactory = TerritoryOperationFactoryImpl(this, config)
+
+        root.localEventBus.addListener(NationDisbandEvent::class.java, NationDisbandListener(this))
     }
 
-    override fun create(schema: com.minepalm.nations.territory.MonumentSchema): CompletableFuture<com.minepalm.nations.territory.NationMonument?> {
+    override fun create(schema: MonumentSchema): CompletableFuture<NationMonument?> {
+        val world = universe.host[schema.center.world]
+
+        if (world == null || !world.isLocal)
+            return CompletableFuture.completedFuture(null)
+
         return locationDatabase.createNewMonument(schema).thenApply {
-            if(it.id != -1) {
-                val success = modifier.create(schema).join()
-                monumentFactory.build(schema)
-            }else
+            try {
+                if (it.id != -1) {
+                    val success = modifier.create(schema).join()
+                    val monument = monumentFactory.build(schema)
+                    if (success) {
+                        world.local.add(monument)
+                        monument
+                    } else {
+                        locationDatabase.deleteMonument(schema.id)
+                        null
+                    }
+                } else
+                    null
+            } catch (e: Exception) {
+                e.printStackTrace()
+                locationDatabase.deleteMonument(schema.id)
                 null
+            }
         }
     }
 

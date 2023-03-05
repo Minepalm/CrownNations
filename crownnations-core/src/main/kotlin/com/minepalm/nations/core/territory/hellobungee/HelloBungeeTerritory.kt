@@ -1,10 +1,11 @@
 package com.minepalm.nations.core.territory.hellobungee
 
 import com.minepalm.library.network.api.PalmNetwork
+import com.minepalm.nations.territory.NationTerritoryService
 
 class HelloBungeeTerritory {
 
-    fun initialize(network: PalmNetwork, territoryService: com.minepalm.nations.territory.NationTerritoryService){
+    fun initialize(network: PalmNetwork, territoryService: NationTerritoryService) {
         network.apply {
             gateway.registerAdapter(RequestMonumentSave.Adapter())
             gateway.registerAdapter(RequestMonumentLoad.Adapter())

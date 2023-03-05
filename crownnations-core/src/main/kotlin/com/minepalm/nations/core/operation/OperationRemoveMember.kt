@@ -1,6 +1,7 @@
 package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.*
+import com.minepalm.nations.event.NationRemoveMemberEvent
 
 class OperationRemoveMember(
     val nation : Nation,
@@ -12,13 +13,14 @@ class OperationRemoveMember(
     override fun checkOrThrow() {
         if(!commander.cache.isAdmin()){
             val rankFuture = nation.direct.getRank(user.uniqueId)
+            val commanderRank = nation.cache.getRank(commander.uniqueId)
             val commanderNation = commander.direct.getNation().join()
 
             if(commanderNation == null || commanderNation.id != nation.id){
                 fail(ResultCode.NATION_MISMATCH, "당신은 해당 국가에 소속되어 있지 않습니다.")
             }
 
-            if(!nation.cache.getRank(commander.uniqueId).hasPermissibleOf(NationRank.OFFICER)){
+            if(!commanderRank.hasPermissibleOf(NationRank.OFFICER)){
                 fail(ResultCode.NO_PERMISSION, "당신은 국가 관리자가 아닙니다.")
             }
 
@@ -26,7 +28,7 @@ class OperationRemoveMember(
                 fail(ResultCode.NATION_PLAYER_NOT_EXISTS, "해당 플레이어는 국가원이 아닙니다.")
             }
 
-            if(nation.cache.getRank(commander.uniqueId).hasPermissibleOf(rankFuture.join())){
+            if(!commanderRank.hasPermissibleOf(rankFuture.join())){
                 fail(ResultCode.NO_PERMISSION_THAN_USER, "해당 플레이어는 당신보다 국가 등급이 높습니다.")
             }
         }
@@ -41,8 +43,7 @@ class OperationRemoveMember(
     override fun process0() {
         setResult(false)
 
-        val event =
-            com.minepalm.nations.event.NationRemoveMemberEvent(nation.id, commander.uniqueId, user.uniqueId, "KICK")
+        val event = NationRemoveMemberEvent(nation.id, commander.uniqueId, user.uniqueId, "KICK")
         service.localEventBus.invoke(event)
 
         if(event.cancelled){
@@ -56,7 +57,7 @@ class OperationRemoveMember(
         }
 
         service.network.send(event)
-        success(ResultCode.SUCCESSFUL, true)
+        success(true)
     }
 
 }

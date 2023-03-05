@@ -2,6 +2,7 @@ package com.minepalm.nations.core.operation
 
 import com.minepalm.nations.NationService
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.event.WarPreDeclarationEvent
 import com.minepalm.nations.war.WarSession
 import com.minepalm.nations.war.WarStatus
 import com.minepalm.nations.war.WarTime
@@ -23,7 +24,7 @@ class OperationWarStart(
     }
 
     override fun process0() {
-        val event = com.minepalm.nations.event.WarPreDeclarationEvent(session.info, false)
+        val event = WarPreDeclarationEvent(session.info, false)
         service.localEventBus.invoke(event)
         if (event.cancelled) {
             fail(ResultCode.EVENT_CANCELLED, "")

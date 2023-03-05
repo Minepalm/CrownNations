@@ -3,6 +3,7 @@ package com.minepalm.nations.core.operation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationRank
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.event.TerritoryDecomposeEvent
 
 class OperationDecomposeOutpost(
     private val service: com.minepalm.nations.territory.NationTerritoryService,
@@ -25,7 +26,7 @@ class OperationDecomposeOutpost(
 
 
     override fun process0() {
-        val event = com.minepalm.nations.event.TerritoryDecomposeEvent(
+        val event = TerritoryDecomposeEvent(
             monument.nationId,
             monument.id,
             monument.type,
@@ -38,7 +39,7 @@ class OperationDecomposeOutpost(
 
 
         service.root.network.send(event)
-        success(ResultCode.SUCCESSFUL, monument.collapse().join())
+        success(monument.collapse().join())
     }
 
 }

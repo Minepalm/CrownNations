@@ -5,15 +5,15 @@ import com.minepalm.arkarangutils.bukkit.BukkitExecutor
 import com.minepalm.arkarangutils.invitation.InvitationService
 import com.minepalm.library.PalmLibrary
 import com.minepalm.nations.NationService
+import com.minepalm.nations.bukkit.commands.AdminCommands
+import com.minepalm.nations.bukkit.commands.DebugCommands
+import com.minepalm.nations.bukkit.commands.UserCommands
 import com.minepalm.nations.bukkit.config.YamlMessageFile
 import com.minepalm.nations.bukkit.config.YamlNationConfigurations
 import com.minepalm.nations.bukkit.invitation.MemberInvitationStrategy
 import com.minepalm.nations.bukkit.invitation.MySQLNationInvitationDatabase
 import com.minepalm.nations.bukkit.invitation.PalmLibraryInvitationLoad
-import com.minepalm.nations.bukkit.listener.bukkit.BukkitGeneralListener
-import com.minepalm.nations.bukkit.listener.bukkit.NationMonumentClaimListener
-import com.minepalm.nations.bukkit.listener.bukkit.NationTeamProtectionListener
-import com.minepalm.nations.bukkit.listener.bukkit.NationTerritoryProtectionListener
+import com.minepalm.nations.bukkit.listener.bukkit.*
 import com.minepalm.nations.bukkit.listener.nation.AlertListenerInitializer
 import com.minepalm.nations.bukkit.message.PrinterRegistry
 import com.minepalm.nations.bukkit.territory.SchematicStorage
@@ -63,11 +63,17 @@ class CrownNationsBukkit : JavaPlugin(){
 
         players = PlayerCache(playerModule)
         broadcaster = NetworkBroadcaster(chatModule, mysqlAddon)
-        launcher = PalmNationsLauncher(YamlNationConfigurations(this), networkModule, dataSource,
+        launcher = PalmNationsLauncher(
+            YamlNationConfigurations(this), networkModule, dataSource,
             BukkitUnloadPolicy(),
-            SchematicWorldModifier(SchematicStorage(File(dataFolder, "schematics")), bukkitExecutor),
+            SchematicWorldModifier(
+                SchematicStorage(File(dataFolder, "schematics"), config.territory),
+                bukkitExecutor,
+                config.territory
+            ),
             Executors.newCachedThreadPool(),
-            Executors.newCachedThreadPool())
+            Executors.newCachedThreadPool()
+        )
         nations = launcher.launch()
         inst = nations
 
@@ -80,7 +86,7 @@ class CrownNationsBukkit : JavaPlugin(){
 
         BukkitCommandManager(this).apply {
             registerCommand(
-                com.minepalm.nations.bukkit.commands.UserCommands(
+                UserCommands(
                     nations,
                     players,
                     printerRegistry,
@@ -91,15 +97,17 @@ class CrownNationsBukkit : JavaPlugin(){
                 )
             )
             registerCommand(
-                com.minepalm.nations.bukkit.commands.AdminCommands(nations, players, bukkitExecutor)
+                AdminCommands(nations, players, bukkitExecutor)
             )
+            registerCommand(DebugCommands(nations))
         }
-        Bukkit.getPluginManager().registerEvents(BukkitGeneralListener(PlayerLoader(nations)), this)
+        Bukkit.getPluginManager().registerEvents(BukkitGeneralListener(PlayerLoader(nations), players), this)
         Bukkit.getPluginManager().registerEvents(NationTeamProtectionListener(nations), this)
         Bukkit.getPluginManager().registerEvents(NationTerritoryProtectionListener(nations), this)
         Bukkit.getPluginManager().registerEvents(
-            NationMonumentClaimListener(printerRegistry, nations, sessions, config.territory, bukkitExecutor), this)
-
+            NationMonumentClaimListener(printerRegistry, nations, sessions, config.territory, bukkitExecutor), this
+        )
+        Bukkit.getPluginManager().registerEvents(NationTerritoryJoinListener(nations.territoryService), this)
     }
 
     override fun onDisable() {

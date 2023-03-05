@@ -49,7 +49,7 @@ class OperationCreate(
             return
         }
 
-        success(ResultCode.SUCCESSFUL, nation)
+        success(nation)
     }
 
 }

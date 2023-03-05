@@ -49,6 +49,6 @@ class OperationNationUpgrade(
             fail(ResultCode.EVENT_CANCELLED, "")
         }
 
-        success("SUCCESSFUL", event.result)
+        success(event.result)
     }
 }

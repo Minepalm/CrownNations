@@ -3,6 +3,8 @@ package com.minepalm.nations.core.operation
 import com.minepalm.nations.NationOperation
 import com.minepalm.nations.OperationResult
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.exception.OperationFailedException
+import com.minepalm.nations.exception.OperationInterruptedException
 import java.util.concurrent.ConcurrentHashMap
 
 abstract class AbstractNationOperation<T : Any>: NationOperation<T> {
@@ -25,14 +27,15 @@ abstract class AbstractNationOperation<T : Any>: NationOperation<T> {
     }
 
     override fun process(): OperationResult<T> {
-        try{
+        try {
             checkOrThrow()
             process0()
-        }catch (failed: com.minepalm.nations.exception.OperationFailedException){
+        } catch (failed: OperationFailedException) {
+            setCode(failed.code)
             setException(failed)
-        }catch (_: com.minepalm.nations.exception.OperationInterruptedException){
+        } catch (_: OperationInterruptedException) {
             //skip this
-        }catch (unchecked : Throwable){
+        } catch (unchecked: Throwable) {
             setCode(ResultCode.UNCHECKED_EXCEPTION)
             setException(unchecked)
         }
@@ -40,14 +43,14 @@ abstract class AbstractNationOperation<T : Any>: NationOperation<T> {
     }
 
     override fun check(): OperationResult<Boolean> {
-        return try{
+        return try {
             checkOrThrow()
             generateResult(ResultCode.SUCCESSFUL, true)
-        }catch (failed: com.minepalm.nations.exception.OperationFailedException){
+        } catch (failed: OperationFailedException) {
             generateResult(failed.code, false, failed)
-        }catch (unchecked: Throwable){
+        } catch (unchecked: Throwable) {
             generateResult(ResultCode.UNCHECKED_EXCEPTION, false, unchecked)
-        }finally {
+        } finally {
             data.clear()
         }
     }
@@ -56,15 +59,19 @@ abstract class AbstractNationOperation<T : Any>: NationOperation<T> {
 
     abstract fun process0()
 
-    fun setCode(code : String){
+    open fun rollback() {
+        //do nothing
+    }
+
+    fun setCode(code: String) {
         data["code"] = code
     }
 
-    fun getCode(): String{
+    fun getCode(): String {
         return data["code"] as? String ?: ResultCode.PROGRESS
     }
 
-    fun setResult(t : T){
+    fun setResult(t: T) {
         data["result"] = t
     }
 
@@ -90,6 +97,7 @@ abstract class AbstractNationOperation<T : Any>: NationOperation<T> {
 
     protected fun processComplete(code: String, result: T?, exception: Throwable? = null): OperationResult<T> {
         return try{
+            setCode(code)
             OperationResult(code, result, mutableMapOf<String, Any>().apply { putAll(data) }, exception)
         }finally {
             data.clear()
@@ -97,16 +105,17 @@ abstract class AbstractNationOperation<T : Any>: NationOperation<T> {
     }
 
     protected fun <R : Any> generateResult(code: String, result: R, ex: Throwable? = null): OperationResult<R> {
+        setCode(code)
         return OperationResult(code, result, mutableMapOf<String, Any>().apply { putAll(data) }, ex)
     }
 
-    protected fun fail(code : String, msg : String){
-        throw com.minepalm.nations.exception.OperationFailedException(code, msg)
+    protected fun fail(code: String, msg: String) {
+        throw OperationFailedException(code, msg)
     }
 
-    protected fun success(code : String, result : T){
-        setCode(code)
+    protected fun success(result: T) {
+        setCode(ResultCode.SUCCESSFUL)
         setResult(result)
-        throw com.minepalm.nations.exception.OperationInterruptedException(code, "success")
+        throw OperationInterruptedException(ResultCode.SUCCESSFUL, "success")
     }
 }

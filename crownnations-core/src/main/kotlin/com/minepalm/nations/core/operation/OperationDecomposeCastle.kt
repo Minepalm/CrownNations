@@ -3,10 +3,13 @@ package com.minepalm.nations.core.operation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationRank
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.event.TerritoryDecomposeEvent
+import com.minepalm.nations.territory.NationCastle
+import com.minepalm.nations.territory.NationTerritoryService
 
 class OperationDecomposeCastle(
-    private val service: com.minepalm.nations.territory.NationTerritoryService,
-    private val monument: com.minepalm.nations.territory.NationCastle,
+    private val service: NationTerritoryService,
+    private val monument: NationCastle,
     private val reason: String,
     private val commander: NationMember,
 ) : AbstractNationOperation<Boolean>() {
@@ -25,7 +28,7 @@ class OperationDecomposeCastle(
     }
 
     override fun process0() {
-        val event = com.minepalm.nations.event.TerritoryDecomposeEvent(
+        val event = TerritoryDecomposeEvent(
             monument.nationId,
             monument.id,
             monument.type,
@@ -38,7 +41,7 @@ class OperationDecomposeCastle(
 
 
         service.root.network.send(event)
-        success(ResultCode.SUCCESSFUL, monument.collapse().join())
+        success(monument.collapse().join())
     }
 
 }

@@ -15,6 +15,9 @@ class PrinterRegistry {
         replacements["%error%"] = Placeholders.ERROR
         replacements["%members%"] = Placeholders.NATION_MEMBERS
         replacements["%owner%"] = Placeholders.NATION_OWNER
+        replacements["%officers%"] = Placeholders.NATION_OFFICERS
+        replacements["%money%"] = Placeholders.MONEY
+        replacements["%amount%"] = Placeholders.AMOUNT
     }
 
     fun register(provider: ResultPrinter){

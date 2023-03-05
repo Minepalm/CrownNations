@@ -1,8 +1,11 @@
 package com.minepalm.nations.core.territory
 
+import com.minepalm.nations.territory.NationCastle
+import com.minepalm.nations.territory.NationMonument
+
 class PalmNationCastle(
-    controller: com.minepalm.nations.territory.NationMonument
-) : MonumentWrapper(controller), com.minepalm.nations.territory.NationCastle {
+    controller: NationMonument
+) : MonumentWrapper(controller), NationCastle {
     override fun getBeaconLocation(): com.minepalm.nations.utils.ServerLoc {
         return center
     }

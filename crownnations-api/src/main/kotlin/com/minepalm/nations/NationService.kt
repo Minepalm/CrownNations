@@ -7,6 +7,7 @@ import com.minepalm.nations.server.NationNetwork
 import com.minepalm.nations.territory.NationTerritoryService
 import com.minepalm.nations.utils.ServerLoc
 import com.minepalm.nations.war.NationWarService
+import java.util.concurrent.CompletableFuture
 
 interface NationService {
 
@@ -35,4 +36,5 @@ interface NationService {
 
     fun createNewNation(name: String): Nation?
 
+    fun forceDelete(id: Int): CompletableFuture<Boolean>
 }

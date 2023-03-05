@@ -3,11 +3,12 @@ package com.minepalm.nations.core.operation
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationService
 import com.minepalm.nations.ResultCode
+import com.minepalm.nations.war.MonumentObjective
 import java.util.concurrent.CompletableFuture
 
 class OperationWarMonumentDamage(
     val commander: NationMember,
-    val objective: com.minepalm.nations.war.MonumentObjective,
+    val objective: MonumentObjective,
     val amount: Int,
     val service: NationService
 ) : AbstractNationOperation<Boolean>(){

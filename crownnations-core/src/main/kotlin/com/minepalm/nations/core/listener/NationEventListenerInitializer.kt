@@ -1,50 +1,42 @@
 package com.minepalm.nations.core.listener
 
 import com.minepalm.nations.NationService
+import com.minepalm.nations.event.*
 import java.util.concurrent.ExecutorService
 
 object NationEventListenerInitializer {
 
     fun init(service: NationService, executor: ExecutorService) {
         service.remoteEventBus.run {
-            addEventInitializer(com.minepalm.nations.event.NationCreateEvent::class.java, SyncCreate(service, executor))
+            addEventInitializer(NationCreateEvent::class.java, SyncCreate(service, executor))
+            addEventInitializer(NationDisbandEvent::class.java, SyncDisband(service, executor))
+            addEventInitializer(NationMetadataChangeEvent::class.java, SyncMetadataChange(service, executor))
             addEventInitializer(
-                com.minepalm.nations.event.NationDisbandEvent::class.java,
-                SyncDisband(service, executor)
-            )
-            addEventInitializer(
-                com.minepalm.nations.event.NationMetadataChangeEvent::class.java,
-                SyncMetadataChange(service, executor)
-            )
-            addEventInitializer(
-                com.minepalm.nations.event.NationAddMemberEvent::class.java,
+                NationAddMemberEvent::class.java,
                 SyncAddMember(service, executor)
             )
+            addEventInitializer(NationRemoveMemberEvent::class.java, SyncRemoveMember(service, executor))
             addEventInitializer(
-                com.minepalm.nations.event.NationRemoveMemberEvent::class.java,
-                SyncRemoveMember(service, executor)
-            )
-            addEventInitializer(
-                com.minepalm.nations.event.NationSetRankEvent::class.java,
+                NationSetRankEvent::class.java,
                 SyncSetRank(service, executor)
             )
             addEventInitializer(
-                com.minepalm.nations.event.NationTransferEvent::class.java,
+                NationTransferEvent::class.java,
                 SyncTransfer(service, executor)
             )
-            addEventInitializer(com.minepalm.nations.event.NationUpdateEvent::class.java, SyncUpdate(service, executor))
+            addEventInitializer(NationUpdateEvent::class.java, SyncUpdate(service, executor))
             addEventInitializer(
-                com.minepalm.nations.event.NationGradeUpdateEvent::class.java,
+                NationGradeUpdateEvent::class.java,
                 SyncGrade.Update(service)
             )
-            addEventInitializer(com.minepalm.nations.event.NationPromoteEvent::class.java, SyncGrade.Promote(service))
+            addEventInitializer(NationPromoteEvent::class.java, SyncGrade.Promote(service))
 
             addEventInitializer(
-                com.minepalm.nations.event.TerritoryPostClaimEvent::class.java,
+                TerritoryPostClaimEvent::class.java,
                 SyncTerritory.Claim(service)
             )
             addEventInitializer(
-                com.minepalm.nations.event.TerritoryDecomposeEvent::class.java,
+                TerritoryDecomposeEvent::class.java,
                 SyncTerritory.Decompose(service)
             )
 

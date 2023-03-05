@@ -24,8 +24,8 @@ class UserCommandCreate(
             if(result.code != ResultCode.EVENT_CANCELLED) {
 
                 val messageCode = when {
-                    printer.containsMessage(result.code) -> result.code
                     result.code == ResultCode.SUCCESSFUL -> ResultCode.PREPARE_COMPLETE
+                    printer.containsMessage(result.code) -> result.code
                     else -> "ERROR"
                 }
 
