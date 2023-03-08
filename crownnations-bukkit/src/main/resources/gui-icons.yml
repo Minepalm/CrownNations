@@ -1,0 +1,12 @@
+outpost:
+  material: NETHERRACK
+  display: '<white>%index% 번째 전초기지'
+  lore:
+    - '<white> 위치: %server%'
+    - '<white> 클릭시 해당 전초기지로 이동합니다.'
+castle:
+  material: BEACON
+  display: '<white> %index% 번째 성'
+  lore:
+    - '<white> 위치: %server%'
+    - '<white> 클릭시 해당 전초기지로 이동합니다.'

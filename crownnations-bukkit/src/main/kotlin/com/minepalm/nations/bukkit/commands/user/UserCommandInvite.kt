@@ -34,7 +34,7 @@ sealed class UserCommandInvite {
 
                 val result = execute(player, username, uuid, nationFuture)
                 val nation = nationFuture.join()
-                Bukkit.getLogger().info("55")
+
                 val map = mutableMapOf<String, String>().apply {
                     set("player", player.name)
                     set("nation", nation?.name ?: "")
@@ -47,7 +47,6 @@ sealed class UserCommandInvite {
                         System.currentTimeMillis() + 30000L
                     )
                     invitations.sender(player.uniqueId).invite(uuid)
-                    Bukkit.getLogger().info("complete usercommand")
                 } else {
                     val msgCode = when {
                         printer.containsMessage(result.code) -> result.code
@@ -84,7 +83,7 @@ sealed class UserCommandInvite {
                 val map = database.getInvitedNations(player.uniqueId).join()
 
                 if (map.containsKey(nationName)) {
-                    val successful = invitations.receiver(player.uniqueId).accept(map[nationName]!!).join()
+                    invitations.receiver(player.uniqueId).accept(map[nationName]!!).join()
                 } else {
                     player.sendMessage(printer["NO_INVITATION"])
                 }

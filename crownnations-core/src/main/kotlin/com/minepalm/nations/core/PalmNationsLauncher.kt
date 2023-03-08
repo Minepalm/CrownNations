@@ -15,6 +15,7 @@ import com.minepalm.nations.core.listener.NationEventListenerInitializer
 import com.minepalm.nations.core.network.HelloBungeeInitializer
 import com.minepalm.nations.core.territory.PalmNationTerritoryService
 import com.minepalm.nations.grade.NationGradeService
+import com.minepalm.nations.initAs
 import com.minepalm.nations.territory.NationTerritoryService
 import com.minepalm.nations.territory.WorldModifier
 import java.util.concurrent.ExecutorService
@@ -25,7 +26,6 @@ class PalmNationsLauncher(
     private val dataSource: PalmDataSources,
     private val policy: NationRegistry.Policy,
     private val worldModifier: WorldModifier,
-    private val economyAdapter: EconomyAdapter,
     //todo: create nation executor pool
     private val territoryExecutor: ExecutorService,
     private val syncExecutor: ExecutorService
@@ -35,7 +35,6 @@ class PalmNationsLauncher(
 
     fun launch(): PalmNationsService {
         nations = PalmNationsService(mysql("nation"), mysql("member"), networkModule, policy, config)
-
         HelloBungeeInitializer.apply(networkModule, nations)
         NationEventListenerInitializer.init(nations, syncExecutor)
 
@@ -61,7 +60,7 @@ class PalmNationsLauncher(
     }
 
     private fun buildBankRegistry(service: NationService): NationBankRegistry {
-        return PalmNationBankRegistry(service, economyAdapter, mysql("bank"))
+        return PalmNationBankRegistry(service, mysql("bank"))
     }
 
     private fun buildGradeService(service: NationService): NationGradeService {

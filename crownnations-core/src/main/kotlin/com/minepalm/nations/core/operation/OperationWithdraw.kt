@@ -7,7 +7,7 @@ import com.minepalm.nations.event.NationWithdrawEvent
 
 class OperationWithdraw(
     private val service: NationService,
-    private val economy: EconomyAdapter,
+    private val economy: EconomyAdapter?,
     private val nation: Nation,
     private val commander: NationMember,
     private val reason: String,
@@ -47,6 +47,8 @@ class OperationWithdraw(
         }
 
         val after = nation.bank.withdraw(reason, amount).join()
+        economy?.giveMoney(commander.uniqueId, amount)?.join()
+
         success(after)
     }
 }

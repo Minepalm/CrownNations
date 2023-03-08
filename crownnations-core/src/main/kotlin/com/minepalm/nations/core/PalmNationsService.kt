@@ -89,7 +89,9 @@ class PalmNationsService(
         val cleaner = PalmNationRegistryCleaner(this, loopExecutor, Duration.ofMinutes(5), 50L)
 
         memberRegistry = PalmNationMemberRegistry(memberFactory, memberExecutorThreadPool)
+            .initAs(NationMemberRegistry::class)
         nationRegistry = PalmNationRegistry(policy, nationFactory, localEventBus, nationMemberDataDatabase, nationIdDatabase, updateExecutor, cleaner)
+            .initAs(NationRegistry::class)
         cleaner.start()
 
         operationFactory = PalmNationOperationFactory(this)

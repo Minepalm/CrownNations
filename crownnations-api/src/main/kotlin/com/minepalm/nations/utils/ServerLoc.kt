@@ -13,7 +13,7 @@ data class ServerLoc(
     }
 
     fun setY(newY: Int): ServerLoc {
-        return ServerLoc(server, world, x, newY, z)
+        return ServerLoc(server, world, x, newY, z).fixY()
     }
 
     fun setZ(newZ: Int): ServerLoc {
@@ -21,7 +21,10 @@ data class ServerLoc(
     }
 
     fun add(x: Int, y: Int, z: Int): ServerLoc {
-        return ServerLoc(server, world, this.x + x, this.y + y, this.z + z)
+        return ServerLoc(server, world, this.x + x, this.y + y, this.z + z).fixY()
     }
 
+    private fun fixY(): ServerLoc {
+        return ServerLoc(server, world, x, y.coerceAtMost(384).coerceAtLeast(-64), z)
+    }
 }

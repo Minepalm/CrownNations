@@ -1,6 +1,7 @@
 package com.minepalm.nations.bukkit.message
 
 import com.minepalm.nations.bukkit.BugReporter
+import com.minepalm.nations.bukkit.U.kyori
 import com.minepalm.palmchat.api.ChatText
 import com.minepalm.palmchat.api.TextType
 import net.kyori.adventure.text.Component
@@ -15,17 +16,6 @@ class ResultPrinter(
 ) {
 
     //todo: network broadcast 에도 kyori mini message 가 있는데, PalmLibrary 로 빼놓기.
-    companion object {
-        @JvmStatic
-        val kyori = MiniMessage
-            .builder()
-            .tags(
-                TagResolver.builder()
-                    .resolver(StandardTags.defaults())
-                    .build()
-            ).build()
-
-    }
 
     private val map = mutableMapOf<String, List<String>>()
     private val replacements = mutableListOf<Replace>()
@@ -60,7 +50,7 @@ class ResultPrinter(
         val list = map[result.messageCode] ?: mutableListOf<String>().apply { add("<$tag.${result.messageCode}>") }
         return list.joinToString(separator = "<newline>") {
             var str = it
-            replacements.forEach { replace -> str = replace.replace(str, result) }
+            replacements.forEach { replace -> str = replace.replace(str, result.data) }
             str
         }.let {
             Bukkit.getLogger().info("player will receive: $it")

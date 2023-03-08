@@ -22,8 +22,8 @@ class AdminCommandGive(
                 player.sendMessage("지급완료.")
             }
             "outpost" -> {
-                val itemName = config.territory.castleItemName
-                player.inventory.addItem(ItemStack(Material.BEACON).apply {
+                val itemName = config.territory.outpostItemName
+                player.inventory.addItem(ItemStack(Material.NETHERRACK).apply {
                     itemMeta = itemMeta.apply {
                         displayName(Component.text(itemName))
                     }

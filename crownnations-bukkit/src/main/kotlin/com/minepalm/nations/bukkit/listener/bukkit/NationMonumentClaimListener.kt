@@ -119,7 +119,7 @@ class NationMonumentClaimListener(
     }
 
     private fun Player.takeItem(material: Material): ItemStack?{
-        inventory.forEach {  item ->
+        inventory.filterNotNull().forEach {  item ->
             if(item.type == material){
                 return item.clone().also { item.amount = item.amount - 1 }
             }

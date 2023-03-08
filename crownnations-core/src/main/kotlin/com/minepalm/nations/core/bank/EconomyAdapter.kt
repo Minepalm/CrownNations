@@ -5,7 +5,8 @@ import java.util.concurrent.CompletableFuture
 
 interface EconomyAdapter {
 
-    fun hasMoney(uuid: UUID): CompletableFuture<Boolean>
+    fun hasMoney(uuid: UUID, amount: Double): CompletableFuture<Boolean>
+
     fun getMoney(uuid: UUID): CompletableFuture<Double>
 
     fun takeMoney(uuid: UUID, value: Double): CompletableFuture<Double>

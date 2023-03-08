@@ -6,12 +6,14 @@ import co.aikar.commands.annotation.Default
 import co.aikar.commands.annotation.Subcommand
 import com.minepalm.arkarangutils.bukkit.BukkitExecutor
 import com.minepalm.arkarangutils.invitation.InvitationService
+import com.minepalm.nations.Dependencies
 import com.minepalm.nations.NationService
 import com.minepalm.nations.bukkit.CreationSessionRegistry
 import com.minepalm.nations.bukkit.PlayerCache
 import com.minepalm.nations.bukkit.commands.user.*
 import com.minepalm.nations.bukkit.invitation.MySQLNationInvitationDatabase
 import com.minepalm.nations.bukkit.message.PrinterRegistry
+import com.minepalm.nations.config.NationConfigurations
 import org.bukkit.entity.Player
 
 /**
@@ -39,14 +41,16 @@ import org.bukkit.entity.Player
  */
 @CommandAlias("국가|n|국")
 class UserCommands(
-    val service: NationService,
-    val players: PlayerCache,
-    val reg: PrinterRegistry,
     val sessions: CreationSessionRegistry,
     val invitationService: InvitationService,
-    val inviteDatabase: MySQLNationInvitationDatabase,
-    val executor: BukkitExecutor
+    val inviteDatabase: MySQLNationInvitationDatabase
 ) : BaseCommand() {
+
+    val service: NationService by Dependencies[NationService::class]
+    val players: PlayerCache by Dependencies[PlayerCache::class]
+    val reg: PrinterRegistry by Dependencies[PrinterRegistry::class]
+    val config: NationConfigurations by Dependencies[NationConfigurations::class]
+    val executor: BukkitExecutor by Dependencies[BukkitExecutor::class]
 
     @Default
     @Subcommand("도움말")
@@ -127,7 +131,13 @@ class UserCommands(
 
     }
 
+    @Subcommand("워프")
     fun teleport(player: Player) {
+        UserCommandWarp(reg["WARP"], config.territory.warp).whenCommand(player)
+    }
 
+    @Subcommand("워프설정")
+    fun setWarp(player: Player) {
+        UserCommandSetWarp(reg["SET_WARP"]).whenCommand(player)
     }
 }

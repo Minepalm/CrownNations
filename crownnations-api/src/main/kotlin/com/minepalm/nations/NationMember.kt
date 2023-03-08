@@ -14,6 +14,9 @@ interface NationMember {
     interface Cache {
         fun getNation(): Nation?
 
+        val nation: Nation?
+            get() = getNation()
+
         fun hasNation(): Boolean
 
         fun update(nation: Nation)

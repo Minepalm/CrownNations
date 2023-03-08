@@ -39,7 +39,7 @@ class SchematicWorldModifier(
     }
 
     private fun ServerLoc.vector(): BlockVector3 {
-        return BlockVector3.at(x, y, z)
+        return BlockVector3.at(x, y.coerceAtLeast(-64).coerceAtMost(384), z)
     }
 
     private fun copy(schema: MonumentSchema): CompletableFuture<MonumentBlob> {
@@ -77,7 +77,7 @@ class SchematicWorldModifier(
             val maximum = max.vector()
             val region = CuboidRegion(minimum, maximum)
             region.world = weWorld
-
+            Bukkit.getLogger().info("delete range $minimum $maximum")
             val source: EditSession = WorldEdit.getInstance()
                 .newEditSessionBuilder()
                 .world(weWorld)
@@ -134,8 +134,8 @@ class SchematicWorldModifier(
 
     override fun delete(monumentType: String, center: ServerLoc): CompletableFuture<Unit> {
         val range = config.getDeleteRange(monumentType)
-        val min = center.add(-range.weightX, -range.lengthZ, -range.depth)
-        val max = center.add(range.weightX, range.lengthZ, range.height)
+        val min = center.add(-range.weightX, -range.depth, -range.lengthZ)
+        val max = center.add(range.weightX, range.height, range.lengthZ)
         return delete0(min, max)
     }
 

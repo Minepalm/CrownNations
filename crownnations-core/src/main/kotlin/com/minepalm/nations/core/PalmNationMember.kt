@@ -2,6 +2,7 @@ package com.minepalm.nations.core
 
 import com.minepalm.nations.*
 import com.minepalm.nations.core.mysql.MySQLNationMemberDatabase
+import com.minepalm.nations.territory.NationMonument
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
@@ -17,6 +18,7 @@ class PalmNationMember(
     override fun operateLeaveNation(): NationOperation<Boolean> {
         return operationFactory.buildLeave(this)
     }
+
 
     override val cache: NationMember.Cache = MemberCache(uniqueId, registry, direct, admins)
 

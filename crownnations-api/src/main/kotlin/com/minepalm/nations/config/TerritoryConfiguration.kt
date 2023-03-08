@@ -25,6 +25,8 @@ interface TerritoryConfiguration {
 
     val outpostItemName: String
 
+    val warp: WarpConfiguration
+
     fun getSchematic(type: String): String
 
     fun getSchematicOffset(type: String): SchematicOffset

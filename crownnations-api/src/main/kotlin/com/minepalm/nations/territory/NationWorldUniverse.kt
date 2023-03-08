@@ -1,5 +1,7 @@
 package com.minepalm.nations.territory
 
+import com.minepalm.nations.utils.ServerLoc
+
 interface NationWorldUniverse {
 
     val host: Host
@@ -7,7 +9,7 @@ interface NationWorldUniverse {
 
     operator fun get(server: String, name: String): NationWorld?
 
-    fun update(loc: com.minepalm.nations.utils.ServerLoc, monumentId: Int)
+    fun update(loc: ServerLoc, monumentId: Int)
 
     interface Host {
 
@@ -15,11 +17,11 @@ interface NationWorldUniverse {
 
         operator fun get(worldName: String): NationWorld?
 
-        operator fun get(loc: com.minepalm.nations.utils.ServerLoc): NationWorld?
+        operator fun get(loc: ServerLoc): NationWorld?
 
         fun getWorlds(): List<NationWorld>
 
-        fun isInNationWorld(loc: com.minepalm.nations.utils.ServerLoc): Boolean
+        fun isInNationWorld(loc: ServerLoc): Boolean
 
         fun add(world: NationWorld)
 

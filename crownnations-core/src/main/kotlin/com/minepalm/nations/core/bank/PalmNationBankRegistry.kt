@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit
 
 class PalmNationBankRegistry(
     service: NationService,
-    economyAdapter: EconomyAdapter,
     mysql: MySQLDB
 ) : NationBankRegistry {
 
@@ -21,7 +20,7 @@ class PalmNationBankRegistry(
         .build(object : CacheLoader<Int, NationBank>() {
 
             override fun load(key: Int): NationBank {
-                return PalmNationBank(key, database, service, economyAdapter)
+                return PalmNationBank(key, database, service)
             }
 
         })

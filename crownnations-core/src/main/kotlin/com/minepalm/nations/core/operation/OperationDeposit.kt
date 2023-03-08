@@ -7,7 +7,7 @@ import com.minepalm.nations.event.NationDepositEvent
 
 class OperationDeposit(
     private val service: NationService,
-    private val economy: EconomyAdapter,
+    private val economy: EconomyAdapter?,
     private val nation: Nation,
     private val commander: NationMember,
     private val reason: String,
@@ -29,6 +29,10 @@ class OperationDeposit(
             if (amount <= 0) {
                 fail(ResultCode.INVALID_AMOUNT, "0 이상의 금액을 입력해주세요.")
             }
+
+            if (economy?.hasMoney(commander.uniqueId, amount)?.join() == false) {
+                fail(ResultCode.NOT_ENOUGH_MONEY, "소지하고 있는 금액보다 많은 금액을 입금할 수 없습니다.")
+            }
         }
     }
 
@@ -41,6 +45,8 @@ class OperationDeposit(
         }
 
         val after = nation.bank.deposit(reason, amount).join()
+        economy?.takeMoney(commander.uniqueId, amount)?.join()
+
         success(after)
 
     }

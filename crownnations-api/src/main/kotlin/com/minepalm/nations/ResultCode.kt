@@ -29,11 +29,14 @@ object ResultCode {
     const val PLAYER_NOT_ONLINE = "PLAYER_NOT_ONLINE"
     const val UNCHECKED_EXCEPTION = "UNCHECKED_EXCEPTION"
 
+    const val NOT_IN_WORLD = "NOT_IN_WORLD"
+    const val NOT_WARP_MONUMENT = "NOT_WARP_MONUMENT"
     const val REACH_MAX_CASTLE = "REACH_MAX_CASTLE"
     const val REACH_MAX_OUTPOST = "REACH_MAX_OUTPOST"
     const val TOO_CLOSE = "TOO_CLOSE"
     const val TOO_HIGH = "TOO_HIGH"
     const val INVALID_WORLD = "INVALID_WORLD"
+    const val OUT_OF_RANGE = "OUT_OF_RANGE"
 
     const val REACHED_MAX_LEVEL = "REACHED_MAX_LEVEL"
     const val REQUIREMENTS_FAILED = "REQUIREMENTS_FAILED"
@@ -41,6 +44,7 @@ object ResultCode {
 
     const val INVALID_AMOUNT = "INVALID_AMOUNT"
     const val EXCEEDED_AMOUNT = "EXCEEDED_AMOUNT"
+    const val NOT_ENOUGH_MONEY = "NOT_ENOUGH_MONEY"
 
     const val HOME_ALREADY_IN_WAR = "HOME_ALREADY_IN_WAR"
     const val AWAY_ALREADY_IN_WAR = "HOME_ALREADY_IN_WAR"

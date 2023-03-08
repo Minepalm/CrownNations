@@ -3,12 +3,10 @@ package com.minepalm.nations.bukkit.config
 import com.google.common.collect.HashBiMap
 import com.minepalm.arkarangutils.bukkit.SimpleConfig
 import com.minepalm.nations.NationRank
-import com.minepalm.nations.config.GradeConfiguration
-import com.minepalm.nations.config.MemberConfiguration
-import com.minepalm.nations.config.NationConfigurations
-import com.minepalm.nations.config.TerritoryConfiguration
+import com.minepalm.nations.config.*
 import com.minepalm.nations.utils.DeleteRange
 import com.minepalm.nations.utils.SchematicOffset
+import com.minepalm.nations.utils.WarpOffset
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
@@ -62,6 +60,18 @@ class YamlNationConfigurations(
             )
         }
 
+        override val warp: WarpConfiguration = object : WarpConfiguration {
+                override fun getDefaultMonumentOffset(monumentType: String): WarpOffset {
+                    return config.getConfigurationSection("warp.defaultOffset.${monumentType.lowercase(Locale.getDefault())}")?.let {
+                        WarpOffset(it.getInt("x", 0), it.getInt("y", 0), it.getInt("z", 0))
+                    } ?: WarpOffset(0, 0, 0)
+                }
+
+                override fun getWarpDelay(): Int {
+                    return config.getInt("warp.delay", 3)
+                }
+
+            }
     }
 
     class Member(

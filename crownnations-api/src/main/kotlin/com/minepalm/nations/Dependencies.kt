@@ -2,6 +2,7 @@ package com.minepalm.nations
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
 class Dependencies {
@@ -9,19 +10,23 @@ class Dependencies {
     companion object {
         private val hub: Dependencies = Dependencies()
 
-        fun <T : Any> register(clazz: Class<T>, any: T) {
+        fun <T : Any> register(clazz: Class<out T>, any: T) {
             hub.register(clazz, any)
         }
 
         operator fun <T : Any> get(clazz: Class<T>): Depend<T> {
             return hub[clazz]
         }
+
+        operator fun <T : Any> get(clazz: KClass<T>): Depend<T> {
+            return hub[clazz.java]
+        }
     }
 
     private val locks = ConcurrentHashMap<Class<*>, ReentrantLock>()
     private val dependencies = ConcurrentHashMap<Class<*>, Depend<*>>()
 
-    fun <T : Any> register(clazz: Class<T>, value: T) {
+    fun <T : Any> register(clazz: Class<out T>, value: T) {
 
         if (!dependencies.containsKey(clazz)) {
             assign(clazz)
@@ -72,10 +77,21 @@ class Dependencies {
 
         fun get() = delegate
 
+        fun getOrNull() = if (::delegate.isInitialized) delegate else null
+
         @Synchronized
         internal fun set(value: T) {
             delegate = value
         }
+
+        operator fun getValue(thisRef: Any, property: Any): T {
+            return get()
+        }
     }
 
+}
+
+inline infix fun <reified T: Any> T.initAs(clazz: KClass<T>): T {
+    Dependencies.register(clazz.java, this)
+    return this
 }

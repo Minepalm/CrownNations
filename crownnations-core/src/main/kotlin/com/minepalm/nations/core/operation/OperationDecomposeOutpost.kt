@@ -4,10 +4,12 @@ import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationRank
 import com.minepalm.nations.ResultCode
 import com.minepalm.nations.event.TerritoryDecomposeEvent
+import com.minepalm.nations.territory.NationMonument
+import com.minepalm.nations.territory.NationTerritoryService
 
 class OperationDecomposeOutpost(
-    private val service: com.minepalm.nations.territory.NationTerritoryService,
-    private val monument: com.minepalm.nations.territory.NationMonument,
+    private val service: NationTerritoryService,
+    private val monument: NationMonument,
     private val commander: NationMember
 ) : AbstractNationOperation<Boolean>() {
 

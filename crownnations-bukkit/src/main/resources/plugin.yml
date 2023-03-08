@@ -6,4 +6,5 @@ author: Arkarang
 depend:
   - PalmLibrary
   - PalmChat
+  - PalmCoconut
   - WorldEdit

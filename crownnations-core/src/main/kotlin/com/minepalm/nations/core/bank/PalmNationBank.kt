@@ -1,5 +1,6 @@
 package com.minepalm.nations.core.bank
 
+import com.minepalm.nations.Dependencies
 import com.minepalm.nations.NationMember
 import com.minepalm.nations.NationOperation
 import com.minepalm.nations.NationService
@@ -11,9 +12,13 @@ import java.util.concurrent.CompletableFuture
 class PalmNationBank(
     override val nationId: Int,
     private val database: MySQLBankDatabase,
-    private val service: NationService,
-    private val adapter: EconomyAdapter
+    private val service: NationService
 ) : NationBank {
+
+
+    private val adapter: EconomyAdapter?
+        get() = Dependencies[EconomyAdapter::class.java].getOrNull()
+
     override fun withdraw(reason: String, value: Double): CompletableFuture<Double> {
         return database.takeMoney(nationId, value)
     }

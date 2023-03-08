@@ -68,7 +68,7 @@ class OperationClaimCastle(
             location
                 .setX(location.x - config.castleLength / 2)
                 .setZ(location.z - config.castleLength / 2)
-                .setY(0),
+                .setY(-64),
             location
                 .setX(location.x + config.castleLength / 2)
                 .setZ(location.z + config.castleLength / 2)
