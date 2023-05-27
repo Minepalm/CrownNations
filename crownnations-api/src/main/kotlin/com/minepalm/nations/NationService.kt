@@ -1,6 +1,7 @@
 package com.minepalm.nations
 
 import com.minepalm.nations.bank.NationBankRegistry
+import com.minepalm.nations.chat.NationChatRegistry
 import com.minepalm.nations.config.NationConfigurations
 import com.minepalm.nations.grade.NationGradeService
 import com.minepalm.nations.server.NationNetwork
@@ -22,6 +23,7 @@ interface NationService {
     val gradeService: NationGradeService
     val territoryService: NationTerritoryService
     val warService: NationWarService
+    //val chatRegistry: NationChatRegistry
 
     val localEventBus: NationEventBus
     val remoteEventBus: NationEventBus

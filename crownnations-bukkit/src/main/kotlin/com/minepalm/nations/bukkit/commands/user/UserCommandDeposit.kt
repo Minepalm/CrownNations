@@ -33,7 +33,7 @@ class UserCommandDeposit(
 
                 val resultMessage = ResultMessage(messageCode, result).apply {
                     set("player", player.name)
-                    set("nation", player.member().cache.getNation()?.name ?: "알수 없는 국가")
+                    set("nation", player.member().cache.nation?.name ?: "알수 없는 국가")
                     set("amount", "${amount.toInt()}")
                     set("money", "${result.result?.toInt()}")
                 }
@@ -45,7 +45,7 @@ class UserCommandDeposit(
     }
 
     fun execute(player: Player, amount: Double): OperationResult<Double>?{
-        return player.member().let { it.cache.getNation()?.bank?.operateDeposit(it, "COMMAND", amount)?.process() }
+        return player.member().let { it.cache.nation?.bank?.operateDeposit(it, "COMMAND", amount)?.process() }
     }
 
     private fun Player.member(): NationMember {

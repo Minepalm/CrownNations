@@ -88,7 +88,7 @@ class MemberInvitationStrategy(
     override fun onDeny(invitation: Invitation) {
         val issuerName = players.username(invitation.issuer)
         val receiverName = players.username(invitation.received)
-        val nation = service.memberRegistry[invitation.issuer].cache.getNation()
+        val nation = service.memberRegistry[invitation.issuer].cache.nation
         val issuerChannel = chatService.channelRegistry.channel("SYSTEM:${invitation.issuer}")
         val receiverChannel = chatService.channelRegistry.channel("SYSTEM:${invitation.received}")
 

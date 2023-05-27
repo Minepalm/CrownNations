@@ -50,7 +50,7 @@ class ResultPrinter(
         val list = map[result.messageCode] ?: mutableListOf<String>().apply { add("<$tag.${result.messageCode}>") }
         return list.joinToString(separator = "<newline>") {
             var str = it
-            replacements.forEach { replace -> str = replace.replace(str, result.data) }
+            replacements.forEach { replace -> str = replace.replace(str, result) }
             str
         }.let {
             Bukkit.getLogger().info("player will receive: $it")

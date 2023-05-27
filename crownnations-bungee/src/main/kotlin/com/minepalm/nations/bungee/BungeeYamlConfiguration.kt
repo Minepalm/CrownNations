@@ -6,10 +6,13 @@ import com.minepalm.nations.NationRank
 import com.minepalm.nations.config.GradeConfiguration
 import com.minepalm.nations.config.MemberConfiguration
 import com.minepalm.nations.config.TerritoryConfiguration
+import com.minepalm.nations.config.WarpConfiguration
 import com.minepalm.nations.utils.DeleteRange
 import com.minepalm.nations.utils.SchematicOffset
+import com.minepalm.nations.utils.WarpOffset
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.config.Configuration
+import java.util.*
 
 class BungeeYamlConfiguration(plugin: Plugin)
     : BungeeConfig(plugin, "config.yml", true), com.minepalm.nations.config.NationConfigurations {
@@ -49,6 +52,19 @@ class BungeeYamlConfiguration(plugin: Plugin)
 
         override fun getDeleteRange(type: String): DeleteRange {
             throw IllegalAccessException("Proxy cannot get monument delete range")
+        }
+
+        override val warp: WarpConfiguration = object : WarpConfiguration {
+            override fun getDefaultMonumentOffset(monumentType: String): WarpOffset {
+                return config.getSection("warp.defaultOffset.${monumentType.lowercase(Locale.getDefault())}")?.let {
+                    WarpOffset(it.getInt("x", 0), it.getInt("y", 0), it.getInt("z", 0))
+                } ?: WarpOffset(0, 0, 0)
+            }
+
+            override fun getWarpDelay(): Int {
+                return config.getInt("warp.delay", 3)
+            }
+
         }
     }
 

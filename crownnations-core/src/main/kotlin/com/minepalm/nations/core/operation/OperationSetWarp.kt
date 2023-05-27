@@ -19,15 +19,15 @@ class OperationSetWarp(
 
     override fun checkOrThrow() {
         if (!commander.cache.isAdmin()) {
-            if (commander.cache.getNation() == null) {
+            if (commander.cache.nation == null) {
                 fail(ResultCode.NO_NATION, "국가가 없습니다.")
             }
 
-            if (commander.cache.getNation()?.id == monument.nationId) {
+            if (commander.cache.nation?.id == monument.nationId) {
                 fail(ResultCode.NATION_MISMATCH, "국가가 일치하지 않습니다.")
             }
 
-            val nation = commander.cache.getNation()!!
+            val nation = commander.cache.nation!!
 
             if (!nation.cache.getRank(commander.uniqueId).hasPermissibleOf(NationRank.OWNER)) {
                 fail(ResultCode.NO_PERMISSION, "권한이 부족합니다.")

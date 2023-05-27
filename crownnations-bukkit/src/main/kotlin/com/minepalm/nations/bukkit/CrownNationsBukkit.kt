@@ -107,13 +107,9 @@ class CrownNationsBukkit : JavaPlugin(){
         BukkitCommandManager(this).apply {
             registerCommand(
                 UserCommands(
-                    nations,
-                    players,
-                    printerRegistry,
                     sessions,
                     invitationService,
-                    invitationDatabase,
-                    bukkitExecutor
+                    invitationDatabase
                 )
             )
             registerCommand(

@@ -1,5 +1,10 @@
 package com.minepalm.nations
 
+import com.minepalm.nations.bank.NationBank
+import com.minepalm.nations.chat.NationChat
+import com.minepalm.nations.grade.NationGrade
+import com.minepalm.nations.territory.NationTerritory
+import com.minepalm.nations.war.NationWar
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
@@ -11,10 +16,11 @@ interface Nation {
     val unsafe: Unsafe
     val direct: Direct
     val metadata: NationMetadata
-    val grade: com.minepalm.nations.grade.NationGrade
-    val bank: com.minepalm.nations.bank.NationBank
-    val territory: com.minepalm.nations.territory.NationTerritory
-    val war: com.minepalm.nations.war.NationWar
+    val grade: NationGrade
+    val bank: NationBank
+    val territory: NationTerritory
+    val war: NationWar
+    //val chat: NationChat
 
     interface Cache {
 

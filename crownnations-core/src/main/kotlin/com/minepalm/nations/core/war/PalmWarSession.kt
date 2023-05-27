@@ -69,11 +69,11 @@ class PalmWarSession(
     }
 
     override fun isHomeTeam(member: NationMember): Boolean {
-        return isHomeTeam0(member.cache.getNation())
+        return isHomeTeam0(member.cache.nation)
     }
 
     override fun isAwayTeam(member: NationMember): Boolean {
-        return isAwayTeam(member.cache.getNation())
+        return isAwayTeam(member.cache.nation)
     }
 
     override fun getRecorder(nation: Nation): ObjectiveRecorder? {

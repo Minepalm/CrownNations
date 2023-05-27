@@ -1,4 +1,4 @@
-main: kr.rendog.nations.chat.RendogNationChatBungee
+main: com.minepalm.nations.chat.RendogNationChatBungee
 name: RendogNationsChat
 version: 1.0.0
 author: Arkarang

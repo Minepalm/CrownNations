@@ -62,7 +62,7 @@ class NationMonumentClaimListener(
 
     private fun onClaimOutpost(player: Player, loc: ServerLoc) {
         val member = player.member()
-        member.cache.getNation()?.also { nation ->
+        member.cache.nation?.also { nation ->
             val item = player.takeItem(Material.NETHERRACK)?.apply { amount = 1 }
             nation.territory.local.operateNewOutpost(member, loc).process().also {
                 printResult(outpostPrinter, it, player, nation.name)
@@ -75,7 +75,7 @@ class NationMonumentClaimListener(
 
     private fun onClaimCastle(player: Player, loc: ServerLoc) {
         val member = player.member()
-        member.cache.getNation()?.also { nation ->
+        member.cache.nation?.also { nation ->
             val item = player.takeItem(Material.BEACON)?.apply { amount = 1 }
             nation.territory.local.operateNewCastle(member, loc).process().also {
                 printResult(castlePrinter, it, player, nation.name)

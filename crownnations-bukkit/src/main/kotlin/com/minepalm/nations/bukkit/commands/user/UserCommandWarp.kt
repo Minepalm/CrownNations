@@ -11,18 +11,19 @@ import com.minepalm.nations.bukkit.warp.WarpExecutor
 import com.minepalm.nations.config.WarpConfiguration
 import org.bukkit.entity.Player
 
+//todo: Cleanup code
 class UserCommandWarp(
     val printer: ResultPrinter,
     val config: WarpConfiguration
 ){
 
     val service: NationService by Dependencies[NationService::class]
-    val guiFactory: GUIFactory by Dependencies[GUIFactory::class]
-    val warpExecutor: WarpExecutor by Dependencies[WarpExecutor::class]
 
     fun whenCommand(player: Player) {
-        if(service.memberRegistry[player.uniqueId].cache.getNation() != null)
+        if(service.memberRegistry[player.uniqueId].cache.nation != null)
             WarpMainGUI(player.uniqueId).openSync(player)
+        else
+            player.sendMessage("해당 국가가 존재하지 않습니다.")
     }
 
     class Outpost(
@@ -61,7 +62,6 @@ class UserCommandWarp(
         val printer: ResultPrinter,
         val config: WarpConfiguration
     ) {
-
 
         val service: NationService by Dependencies[NationService::class]
         val guiFactory: GUIFactory by Dependencies[GUIFactory::class]

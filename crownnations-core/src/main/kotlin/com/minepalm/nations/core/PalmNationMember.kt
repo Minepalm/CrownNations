@@ -34,9 +34,9 @@ class PalmNationMember(
         init {
             update()
         }
-        override fun getNation(): Nation? {
-            return registry[nationId]
-        }
+
+        override val nation: Nation?
+            get() = registry[nationId]
 
         override fun update(nation: Nation) {
             nationId = nation.id

@@ -22,6 +22,7 @@ repositories{
 
 dependencies {
     paperDevBundle("1.19.3-R0.1-SNAPSHOT")
+    compileOnly("com.minepalm:minepalm-chat:1.1-SNAPSHOT")
     compileOnly("com.minepalm:PalmLibrary-Bukkit:1.0-SNAPSHOT")
     compileOnly("com.minepalm:palmchat-core:1.19-1.1-SNAPSHOT")
     compileOnly("com.minepalm:PalmCoconut:1.0-SNAPSHOT")

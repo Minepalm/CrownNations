@@ -14,7 +14,7 @@ class OperationWarMonumentDamage(
 ) : AbstractNationOperation<Boolean>(){
 
     override fun checkOrThrow() {
-        val commanderNation = commander.cache.getNation()
+        val commanderNation = commander.cache.nation
         val monumentNation = objective.monument.owner
 
         if (commanderNation == null) {
@@ -22,7 +22,7 @@ class OperationWarMonumentDamage(
             return
         }
 
-        if (monumentNation.id == commander.cache.getNation()?.id) {
+        if (monumentNation.id == commander.cache.nation?.id) {
             fail(ResultCode.NATION_MISMATCH, "자신의 국가를 파괴할수 없습니다.")
         }
 
@@ -72,7 +72,7 @@ class OperationWarMonumentDamage(
                     service.localEventBus.invoke(
                         com.minepalm.nations.event.WarNationFallenEvent(
                             nation.id,
-                            commander.cache.getNation()!!.id
+                            commander.cache.nation!!.id
                         )
                     )
                 }

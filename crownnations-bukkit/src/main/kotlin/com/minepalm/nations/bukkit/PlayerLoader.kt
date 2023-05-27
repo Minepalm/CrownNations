@@ -8,7 +8,7 @@ class PlayerLoader(
 ) {
 
     fun onLogin(uuid: UUID){
-        service.memberRegistry.local.load(uuid).thenApply { it.cache.getNation() }.join()
+        service.memberRegistry.local.load(uuid).thenApply { it.cache.nation }.join()
     }
 
     fun onLeft(uuid: UUID){

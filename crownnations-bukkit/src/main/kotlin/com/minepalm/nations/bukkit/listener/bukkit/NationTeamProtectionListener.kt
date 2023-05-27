@@ -33,7 +33,7 @@ class NationTeamProtectionListener(
 
     fun isTeam(player: Player, other: Player): Boolean{
         val member = service.memberRegistry.local[player.uniqueId]
-        val nation = member?.cache?.getNation()
+        val nation = member?.cache?.nation
         if(member != null && nation != null)
             return nation.cache.getRank(other.uniqueId).hasPermissibleOf(NationRank.RESIDENT)
         else

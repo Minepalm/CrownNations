@@ -1,6 +1,7 @@
 package com.minepalm.nations.bukkit
 
 import com.minepalm.library.database.impl.internal.MySQLDB
+import com.minepalm.nations.chat.NationChatType
 import com.minepalm.palmchat.api.ChatService
 import com.minepalm.palmchat.api.ChatText
 import com.minepalm.palmchat.api.ChatType
@@ -16,10 +17,8 @@ class NetworkBroadcaster(
     private val chatModule: ChatService,
     private val mysql: MySQLDB
 ) {
-    object NationChat: ChatType("NATION", 11)
+    val NationChat = NationChatType
 
-    //todo: ChatModule 추가할때 옮겨놓기
-    object NationUserChat: ChatType("NATION_CHAT", 12)
     companion object{
         @JvmStatic
         val kyori = MiniMessage
@@ -33,7 +32,7 @@ class NetworkBroadcaster(
     }
 
     init {
-        chatModule.channelRegistry.register(NationChat, MySQLChannelFactory(MySQLChannelDatabase(mysql)))
+        chatModule.channelRegistry.register(NationChatType, MySQLChannelFactory(MySQLChannelDatabase(mysql)))
     }
 
     fun broadcast(msg: Component){
@@ -44,7 +43,8 @@ class NetworkBroadcaster(
 
     fun broadcast(nationId: Int, msg: Component){
         chatModule.channelRegistry.channel("NATION:$nationId")
-            .session().system()
+            .session()
+            .system()
             .send(ChatText(TextType.KYORI, kyori.serialize(msg)))
     }
 }

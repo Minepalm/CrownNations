@@ -48,7 +48,7 @@ class WarpMainGUI(private val uuid: UUID) : ArkarangGUI(3, "워프") {
 
         funcs[CASTLE] = Consumer { event ->
             event.whoClicked.closeInventory()
-            member.cache.getNation()?.let { nation ->
+            member.cache.nation?.let { nation ->
                 factory.buildCastleWarpGUI(nation, member).thenAccept {
                     it.openSync(event.whoClicked as Player)
                 }
@@ -57,7 +57,7 @@ class WarpMainGUI(private val uuid: UUID) : ArkarangGUI(3, "워프") {
 
         funcs[OUTPOST] = Consumer { event ->
             event.whoClicked.closeInventory()
-            member.cache.getNation()?.let { nation ->
+            member.cache.nation?.let { nation ->
                 factory.buildOutpostWarpGUI(nation, member).thenAccept {
                     it.openSync(event.whoClicked as Player)
                 }

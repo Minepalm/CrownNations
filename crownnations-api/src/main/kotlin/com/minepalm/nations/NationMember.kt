@@ -12,10 +12,8 @@ interface NationMember {
     fun operateLeaveNation(): NationOperation<Boolean>
 
     interface Cache {
-        fun getNation(): Nation?
 
         val nation: Nation?
-            get() = getNation()
 
         fun hasNation(): Boolean
 

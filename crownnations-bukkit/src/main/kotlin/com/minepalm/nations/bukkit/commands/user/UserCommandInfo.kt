@@ -37,7 +37,7 @@ class UserCommandInfo(
 
     fun whenCommand(player: Player) {
         executor.async {
-            val nation = service.memberRegistry[player.uniqueId].cache.getNation()
+            val nation = service.memberRegistry[player.uniqueId].cache.nation
             if (nation == null) {
                 player.sendMessage(printer["NO_NATION"])
                 return@async
